@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "export NODE_ENV=production && node src/app.js",
+    "dev": "export NODE_ENV=development && nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
