@@ -1,12 +1,12 @@
-const http = require("http");
-const port = 3000;
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const port = process.env.PORT;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
+app.get("", async (req, res) => {
   res.end("Hello World");
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
