@@ -1,11 +1,10 @@
-require("dotenv").config();
 const express = require("express");
 const app = express();
+const { port } = require("./config/port");
+const DataBase = require("./config/database");
 
-const port =
-  process.env.NODE_ENV !== "production"
-    ? process.env.LOCAL_PORT
-    : process.env.PORT;
+//connecting to database
+DataBase.connect();
 
 // routes
 app.get("", async (req, res) => {
