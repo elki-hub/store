@@ -1,25 +1,26 @@
 const express = require("express");
 const Product = require("./../models/product");
 const router = express.Router();
+const viewsProductPath = "product/";
 
 router.get("/", async (req, res) => {
   const products = await Product.find().sort({ name: "desc" });
-  res.render("product/product", { products: products });
+  res.render(viewsProductPath + "product", { products: products });
 });
 
 router.get("/new", (req, res) => {
-  res.render("product/new", { product: new Product() });
+  res.render(viewsProductPath + "new", { product: new Product() });
 });
 
 router.get("/edit/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
-  res.render("product/edit", { product: product });
+  res.render(viewsProductPath + "edit", { product: product });
 });
 
 router.get("/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product == null) res.redirect("/");
-  res.render("product/show", { product: product });
+  res.render(viewsProductPath + "show", { product: product });
 });
 
 router.post(
@@ -60,7 +61,7 @@ function saveDrinkAndRedirect(onErrorRender) {
       res.redirect("../");
     } catch (e) {
       console.log(e);
-      res.render(`product/${onErrorRender}`, { product: product });
+      res.render(viewsProductPath + `${onErrorRender}`, { product: product });
     }
   };
 }

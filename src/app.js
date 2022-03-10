@@ -11,8 +11,8 @@ const path = require("path");
 DataBase.connect();
 
 // routes
-app.set("layout", path.join(__dirname, "../views/layout"));
-app.set("views", path.join(__dirname, "../views"));
+app.set("layout", path.join(__dirname, "./views/layout"));
+app.set("views", path.join(__dirname, "./views"));
 app.set("view engine", "ejs");
 
 app.use(expressLayouts);
