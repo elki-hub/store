@@ -1,0 +1,29 @@
+<div class="container">
+    <h1 class="mb-4">Menu Drinks</h1>
+    <a href="./new/" class="btn btn-success">New Drink</a>
+
+    <%products.forEach(product => { %>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="card-title"><%= product.name %></h4>
+                <div class="card-subtitle text-muted mb-2">
+                    <p>category: <%= product.category %></p>
+                </div>
+                <div class="card-subtitle text-muted mb-2">
+                    <p>price: <%= product.price %></p>
+                </div>
+                <div class="card-subtitle text-muted mb-2">
+                    <p>degree: <%= product.degree %></p>
+                </div>
+                <div class="card-text mb-2">
+                    <p>description: <%= product.description %></p>
+                </div>
+                <a href="./<%= product.id %>" class="btn btn-primary">Read More</a>
+                <a href="./edit/<%= product.id %>" class="btn btn-info">Edit</a>
+                <form action="./<%= product.id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    <% }) %>
+</div>
