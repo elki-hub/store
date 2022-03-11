@@ -1,7 +1,7 @@
 const express = require("express");
 const Product = require("./../models/product");
 const router = express.Router();
-const viewsProductPath = "product/";
+const viewsProductPath = "admin/product/";
 
 router.get("/", async (req, res) => {
   const products = await Product.find().sort({ name: "desc" });
@@ -16,6 +16,11 @@ router.get("/edit/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   res.render(viewsProductPath + "edit", { product: product });
 });
+
+/*router.get("/edit/", async (req, res) => {
+  const products = await Product.find().sort({ name: "desc" });
+  res.redirect("../");
+});*/
 
 router.get("/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);

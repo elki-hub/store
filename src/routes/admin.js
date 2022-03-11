@@ -1,11 +1,11 @@
-const express = require('express')
-const router = express.Router()
-const ProductRouter = require('./product')
+const express = require("express");
+const router = express.Router();
+const ProductRouter = require("./product");
 
-router.get('/', (req, res) => {
-    res.render('admin')
-})
+router.get("/", (req, res) => {
+  res.render("admin/admin");
+});
 
-router.use('/product', ProductRouter)
+router.use("/product", ProductRouter);
 
-module.exports = router
+module.exports = router;

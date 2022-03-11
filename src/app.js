@@ -11,15 +11,28 @@ const path = require("path");
 DataBase.connect();
 
 // routes
-app.set("layout", path.join(__dirname, "./views/layout"));
-app.set("views", path.join(__dirname, "./views"));
+// app.set("layout", path.join(__dirname, "/public/views/layout"));
+// app.set("views", path.join(__dirname, "/public/views"));
+//app.use(express.static(path.join(__dirname, "/public")));
+
+app.set("layout", path.join(__dirname, "../public/views/layout"));
+app.set("views", path.join(__dirname, "../public/views"));
+app.use(express.static(path.join(__dirname, "../public"))); //to serve static js/css files
+
 app.set("view engine", "ejs");
+console.log(__dirname);
 
 app.use(expressLayouts);
 app.use(express.urlencoded({ extended: false })); //body parser that parses only JSON
 app.use(methodOverride("_method")); //for delete and put
-app.use("/", Router);
+
+try {
+  app.use("/", Router);
+} catch (e) {
+  console.log(e);
+}
 
 app.listen(port, () => {
+  //console.log(path.join(__dirname, "../public/views/layout"));
   console.log(`Server running at http://localhost:${port}/`);
 });
