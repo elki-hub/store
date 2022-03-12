@@ -1,7 +1,64 @@
-<div class="overlay"></div>
-<div class="container">
-    <h1 class="mb-4">Admin page</h1>
-    <a href="./product/" class="btn btn-success">View products list</a>
-    <a  class="btn btn-success">Categories</a>
-    <a  class="btn btn-success">Orders</a>
-</div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-left">
+            <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                <a href="./product/" class="btn btn-success px-4">View products list</a>
+                <p class="text-center"><a href="./new/" class="btn btn-primary py-3 px-4">Add new category</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="table-wrap">
+                <table class="table">
+                    <thead class="thead-primary">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>Category name</th>
+                        <th></th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%if(categories.length !== 0){
+                      categories.forEach(category => { %>
+                        }
+                        <tr class="alert" role="alert">
+                            <td>
+
+                            </td>
+                            <td>
+                                <div class="img" style="background-image: url(/images/prod-1.jpg);"></div>
+                            </td>
+                            <td>
+                                <div class="email">
+                                    <span><%= category.name %></span>
+                                    <span> </span>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="./<%= category.name %>" class="btn btn-primary">View drinks</a>
+                            </td>
+                            <td>
+                                <a href="./edit/<%= category.id %>" class="btn btn-info">Edit</a>
+                            </td>
+                            <td>
+                                <form action="./<%= category.id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% })} else{%>
+                        <div class="col">
+                            <p>You don't have any categories yet. Add new category!</p>
+                        </div>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

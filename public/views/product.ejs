@@ -1,0 +1,57 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <%products.forEach(product => { %>
+                        <div class="col-md-4 d-flex">
+                            <div class="product ftco-animate">
+                                <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/prod-1.jpg);">
+                                    <div class="desc">
+                                        <p class="meta-prod d-flex">
+                                            <a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
+                                            <a href="product/<%= product.id %>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text text-center">
+                                    <span class="category"><%= product.category %></span>
+                                    <h2>Bacardi 151</h2>
+                                    <p class="mb-0"><span class="price"><%= product.price %> €</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                                <li><a href="#">&lt;</a></li>
+                                <li class="active"><span>1</span></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&gt;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="sidebar-box ftco-animate">
+                    <div class="categories">
+                        <h3>Product Types</h3>
+                        <ul class="p-0">
+                            <% categories.forEach( category => {%>
+                                <li><a href="#"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
+                            <%})%>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

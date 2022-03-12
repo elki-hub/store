@@ -1,31 +1,48 @@
 const express = require("express");
-const Product = require("./../models/product");
 const router = express.Router();
+const Product = require("./../models/product");
+const Category = require("./../models/category");
 const viewsProductPath = "admin/product/";
 
 router.get("/", async (req, res) => {
   const products = await Product.find().sort({ name: "desc" });
-  res.render(viewsProductPath + "product", { products: products });
+  res.render(viewsProductPath + "product", {
+    title: "Products",
+    products: products,
+    categories: await Category.find().sort({ name: "desc" }),
+  });
 });
 
-router.get("/new", (req, res) => {
-  res.render(viewsProductPath + "new", { product: new Product() });
+router.get("/new", async (req, res) => {
+  const categories = await Category.find().sort({ name: "desc" });
+  res.render(viewsProductPath + "new", {
+    title: "Add new Drink",
+    categories: categories,
+    product: new Product(),
+    productCategory: null,
+  });
 });
 
 router.get("/edit/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
-  res.render(viewsProductPath + "edit", { product: product });
-});
 
-/*router.get("/edit/", async (req, res) => {
-  const products = await Product.find().sort({ name: "desc" });
-  res.redirect("../");
-});*/
+  if (product == null) res.redirect("/");
+  res.render(viewsProductPath + "edit", {
+    title: "Edit Drink",
+    categories: await Category.find().sort({ name: "desc" }),
+    product: product,
+    productCategory: await Category.findById(product.category),
+  });
+});
 
 router.get("/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product == null) res.redirect("/");
-  res.render(viewsProductPath + "show", { product: product });
+  res.render(viewsProductPath + "show", {
+    title: "View Drink",
+    category: await Category.findById(product.category),
+    product: product,
+  });
 });
 
 router.post(
@@ -66,7 +83,10 @@ function saveDrinkAndRedirect(onErrorRender) {
       res.redirect("../");
     } catch (e) {
       console.log(e);
-      res.render(viewsProductPath + `${onErrorRender}`, { product: product });
+      res.render(viewsProductPath + `${onErrorRender}`, {
+        title: "Products",
+        product: product,
+      });
     }
   };
 }

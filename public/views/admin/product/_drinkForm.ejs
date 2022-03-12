@@ -1,0 +1,63 @@
+<h3 class="mb-4 billing-heading">Drink Details</h3>
+<div class="row align-items-end">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input required value="<%= product.name %>" type="text" name="name" id="name" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="country">Category</label>
+            <div class="select-wrap">
+                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                <select name="category" id="category" class="form-control">
+                    <% if(categories.length !== 0){
+                    if(productCategory != null){%>
+                        <option value=<%= productCategory.id %>><%= productCategory.name %></option>
+                    <%}categories.forEach(category => {
+                    %>
+                        <option value=<%= category.id %>><%= category.name %></option>
+                    <% }) } else{%>
+                        <option value="">You don't have any categories yet. Add new category firs</option>
+                    <%}%>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100"></div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="price">Price €</label>
+            <textarea name="price" id="price" class="form-control"><%= product.price %></textarea>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="degree">Degree %</label>
+            <textarea name="degree" id="degree" class="form-control"><%= product.degree %></textarea>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="degree">Size l</label>
+            <textarea name="size" id="size" class="form-control"><%= product.size %></textarea>
+        </div>
+    </div>
+
+    <div class="w-100"></div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" class="form-control"><%= product.description %></textarea>
+        </div>
+    </div>
+</div>
+<div class="row mt-5 pt-3 d-flex">
+    <div class="col-md-6">
+        <a href="../" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</div>
+
