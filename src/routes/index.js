@@ -12,6 +12,16 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.get("/product/:id", async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (product == null) res.redirect("/");
+  res.render("admin/product/show", {
+    title: "View Drink",
+    category: await Category.findById(product.category),
+    product: product,
+  });
+});
+
 router.use("/admin", AdminRouter);
 
 module.exports = router;
