@@ -10,8 +10,8 @@ const path = require("path");
 //connecting to database
 DataBase.connect();
 
-// routes
-app.set("layout", path.join(__dirname, "../public/views/layout"));
+//View engine setup
+app.set("layout", path.join(__dirname, "../public/views/_layouts/layout"));
 app.set("views", path.join(__dirname, "../public/views"));
 app.set("view engine", "ejs");
 

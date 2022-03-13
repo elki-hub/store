@@ -1,26 +1,43 @@
 const express = require("express");
 const Category = require("./../models/category");
 const router = express.Router();
-const viewsProductPath = "admin/product/";
+const currentPath = "admin/category/";
+const layout = "_layouts/admin_layout";
 
 router.get("/", async (req, res) => {
   const categories = await Category.find().sort({ name: "desc" });
-  res.render(viewsProductPath + "product", {
-    title: "Categories",
+  res.render(currentPath + "category", {
+    layout: layout,
+    title: "Drinks Categories",
     categories: categories,
   });
 });
 
+/*router.get("/:name", async (req, res) => {
+  const category = await Category.findOne({ name: req.params.name });
+  if (category == null) res.redirect("/");
+  res.render(currentPath + "product/product", {
+    layout: layout,
+    title: category.name + " drinks",
+    category: category,
+    products: await Product.find({ category: category.id }).sort({
+      name: "desc",
+    }),
+  });
+});*/
+
 router.get("/new", (req, res) => {
-  res.render(viewsProductPath + "new", {
-    title: "Add new Drink",
+  res.render(currentPath + "new", {
+    layout: layout,
+    title: "Add new Category",
     category: new Category(),
   });
 });
 
 router.get("/edit/:id", async (req, res) => {
   const category = await Category.findById(req.params.id);
-  res.render(viewsProductPath + "edit", {
+  res.render(currentPath + "edit", {
+    layout: layout,
     title: "Edit Drink",
     category: category,
   });
@@ -51,18 +68,19 @@ router.delete("/:id", async (req, res) => {
 
 function saveCategoryAndRedirect(onErrorRender) {
   return async (req, res) => {
-    let { name } = req.body;
+    console.log(req.body.name);
 
-    let category = req.product;
-    category.name = name;
+    let category = req.category;
+    category.name = req.body.name;
     try {
       await category.save();
       res.redirect("../");
     } catch (e) {
       console.log(e);
-      res.render(viewsProductPath + `${onErrorRender}`, {
-        title: "Products",
-        product: category,
+      res.render(currentPath + `${onErrorRender}`, {
+        layout: layout,
+        title: "Categories",
+        category: category,
       });
     }
   };

@@ -2,10 +2,11 @@
     <div class="container">
         <div class="row justify-content-left">
             <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-                <p class="text-center"><a href="./new/" class="btn btn-primary py-3 px-4">Add new drink</a></p>
+                <p class="text-center"><a href="/admin/category/new/" class="btn btn-primary py-3 px-4">Add new category</a></p>
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
             <div class="table-wrap">
@@ -14,16 +15,16 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Size</th>
-                        <th>&nbsp;</th>
+                        <th>Category name</th>
+                        <th></th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <%products.forEach(product => { %>
+                    <%if(categories.length !== 0){
+                      categories.forEach(category => { %>
+                        }
                         <tr class="alert" role="alert">
                             <td>
 
@@ -33,29 +34,27 @@
                             </td>
                             <td>
                                 <div class="email">
-                                    <span><%= product.name %></span>
-                                    <span><%= product.category %> </span>
+                                    <span><%= category.name %></span>
+                                    <span> </span>
                                 </div>
                             </td>
                             <td>
-                                <span class="price"><%= product.price %></span>
-                            </td>
-                            <td class="quantity">
-                                <p>1 l</p>
+<!--                                <a href="./<%= category.name %>" class="btn btn-primary">View drinks</a>-->
                             </td>
                             <td>
-                                <a href="/admin/product/<%= product.id %>" class="btn btn-primary">View item</a>
+                                <a href="/admin/category/edit/<%= category.id %>" class="btn btn-info">Edit</a>
                             </td>
                             <td>
-                                <a href="/admin/product/edit/<%= product.id %>" class="btn btn-info">Edit</a>
-                            </td>
-                            <td>
-                                <form action="./<%= product.id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
+                                <form action="/admin/category/<%= category.id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
                         </tr>
-                    <% }) %>
+                    <% })} else{%>
+                        <div class="col">
+                            <p>You don't have any categories yet. Add new category!</p>
+                        </div>
+                    <%}%>
                     </tbody>
                 </table>
             </div>

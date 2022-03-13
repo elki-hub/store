@@ -3,19 +3,24 @@ const router = express.Router();
 const Product = require("./../models/product");
 const Category = require("./../models/category");
 const viewsProductPath = "admin/product/";
+const layout = "_layouts/admin_layout";
 
 router.get("/", async (req, res) => {
-  const products = await Product.find().sort({ name: "desc" });
+  let products = await Product.find().sort({ name: "desc" });
+  const categories = await Category.find().sort({ name: "desc" });
+
   res.render(viewsProductPath + "product", {
+    layout: layout,
     title: "Products",
     products: products,
-    categories: await Category.find().sort({ name: "desc" }),
+    categories: categories,
   });
 });
 
 router.get("/new", async (req, res) => {
   const categories = await Category.find().sort({ name: "desc" });
   res.render(viewsProductPath + "new", {
+    layout: layout,
     title: "Add new Drink",
     categories: categories,
     product: new Product(),
@@ -28,6 +33,7 @@ router.get("/edit/:id", async (req, res) => {
 
   if (product == null) res.redirect("/");
   res.render(viewsProductPath + "edit", {
+    layout: layout,
     title: "Edit Drink",
     categories: await Category.find().sort({ name: "desc" }),
     product: product,
@@ -39,6 +45,7 @@ router.get("/:id", async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product == null) res.redirect("/");
   res.render(viewsProductPath + "show", {
+    layout: layout,
     title: "View Drink",
     category: await Category.findById(product.category),
     product: product,
@@ -84,6 +91,7 @@ function saveDrinkAndRedirect(onErrorRender) {
     } catch (e) {
       console.log(e);
       res.render(viewsProductPath + `${onErrorRender}`, {
+        layout: layout,
         title: "Products",
         product: product,
       });
