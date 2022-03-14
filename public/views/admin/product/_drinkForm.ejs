@@ -1,17 +1,18 @@
 <h3 class="mb-4 billing-heading">Drink Details</h3>
 <div class="row align-items-end">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="form-group">
             <label for="name">Name</label>
             <input required value="<%= product.name %>" type="text" name="name" id="name" class="form-control">
         </div>
     </div>
+    <div class="w-100"></div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="country">Category</label>
             <div class="select-wrap">
                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                <select name="category" id="category" class="form-control">
+                <label for="category">Category</label>
+                <select required name="category" id="category" class="form-control">
                     <% if(categories.length !== 0){
                     if(productCategory != null){%>
                         <option value=<%= productCategory.id %>><%= productCategory.name %></option>
@@ -25,24 +26,43 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="country">Country</label>
+            <div class="select-wrap">
+                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                <select name="country" id="country" class="form-control">
+                    <% if(countries.length !== 0){
+                        if(product.country != null){%>
+                            <option value=<%= product.country %>><%= product.country %></option><%}
+                        countries.forEach(country => {
+                        %>
+                            <option value=<%= country %>><%= country %></option>
+                    <% }) } else{%>
+                        <option value="">You don't have any categories yet. Add new category firs</option>
+                    <%}%>
+                </select>
+            </div>
+        </div>
+    </div>
 
     <div class="w-100"></div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="price">Price €</label>
-            <textarea name="price" id="price" class="form-control"><%= product.price %></textarea>
+            <input required name="price" id="price" value="<%= product.price %>" class="form-control">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Degree %</label>
-            <textarea name="degree" id="degree" class="form-control"><%= product.degree %></textarea>
+            <input required name="degree" id="degree" value="<%= product.degree %>" class="form-control">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Size l</label>
-            <textarea name="size" id="size" class="form-control"><%= product.size %></textarea>
+            <input required name="size" id="size" value="<%= product.size %>" class="form-control">
         </div>
     </div>
 
@@ -50,7 +70,20 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" id="description" class="form-control"><%= product.description %></textarea>
+            <textarea name="description" id="description" rows="5" class="form-control"><%= product.description %></textarea>
+        </div>
+    </div>
+    <div class="w-100"></div>
+    <% if (product.image) { %>
+        <div class="col-md-2">
+            <img src="/images/products/<%= product.id %>_<%= product.image %>" id="imgPreview" class="img" alt="" height="100">
+            <p> Current image</p>
+        </div>
+    <% }%>
+    <div class="col-md-10">
+        <div class="form-group">
+            <label for="description">Image</label>
+            <input type="file" name="image" id="image" class="form-control" alt="">
         </div>
     </div>
 </div>
@@ -60,4 +93,20 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
 </div>
+
+<script>
+    function readURL(input){
+      if(input.files && input.files[0]){
+        let reader = new FileReader();
+        reader.onload = function(e){
+          $("#imgPreview").attr('src', e.target.result).width(100).height(100);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $('#img').change(function(){
+      readURL(this);
+    });
+</script>
 

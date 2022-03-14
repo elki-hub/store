@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const Product = require("./../models/product");
 const Category = require("./../models/category");
+const country = require("country-list-js");
 const viewsProductPath = "admin/product/";
 const layout = "_layouts/admin_layout";
+let fs = require("fs-extra");
+let resizeImg = require("resize-img");
 
 router.get("/", async (req, res) => {
   let products = await Product.find().sort({ name: "desc" });
@@ -19,12 +22,16 @@ router.get("/", async (req, res) => {
 
 router.get("/new", async (req, res) => {
   const categories = await Category.find().sort({ name: "desc" });
+
+  //console.log(country.names());
+
   res.render(viewsProductPath + "new", {
     layout: layout,
     title: "Add new Drink",
     categories: categories,
     product: new Product(),
     productCategory: null,
+    countries: country.names(),
   });
 });
 
@@ -38,6 +45,7 @@ router.get("/edit/:id", async (req, res) => {
     categories: await Category.find().sort({ name: "desc" }),
     product: product,
     productCategory: await Category.findById(product.category),
+    countries: country.names(),
   });
 });
 
@@ -72,21 +80,47 @@ router.put(
 
 router.delete("/:id", async (req, res) => {
   await Product.findByIdAndDelete(req.params.id);
+  //req.flash("success", "Category was deleted");
   res.redirect("./");
 });
 
 function saveDrinkAndRedirect(onErrorRender) {
   return async (req, res) => {
-    let { name, category, price, degree, description } = req.body;
+    let { name, category, country, price, degree, size, description } =
+      req.body;
 
+    let image = req.files !== null ? req.files.image.name : null;
     let product = req.product;
+    let oldProductImage = await product.image;
+
     product.name = name;
     product.category = category;
     product.price = price;
+    product.country = country;
+    product.size = size;
+    product.image = image;
     product.degree = degree;
     product.description = description;
+
     try {
       await product.save();
+
+      //adding photo to gallery
+      if (image !== null) {
+        let productImage = req.files.image;
+
+        await fs.remove(
+          "public/images/products/" + product.id + "_" + oldProductImage
+        );
+
+        await productImage.mv(
+          "public/images/products/" + product.id + "_" + image,
+          function (err) {
+            return console.log(err);
+          }
+        );
+      }
+
       res.redirect("../");
     } catch (e) {
       console.log(e);

@@ -6,6 +6,7 @@
             </div>
         </div>
     </div>
+    <% if(products.length > 0 ){ %>
     <div class="container">
         <div class="row">
             <div class="table-wrap">
@@ -13,10 +14,10 @@
                     <thead class="thead-primary">
                     <tr>
                         <th>&nbsp;</th>
-                        <th>&nbsp;</th>
                         <th>Product</th>
                         <th>Price</th>
                         <th>Size</th>
+                        <th>Degrees</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
@@ -27,9 +28,12 @@
                         <tr class="alert" role="alert">
                             <td>
 
-                            </td>
-                            <td>
-                                <div class="img" style="background-image: url(/images/prod-1.jpg);"></div>
+
+                            <% if(product.image === null){%>
+                                    <img class="img" src="/images/no-image.png" alt="">
+                                <%} else{ %>
+                                    <img class="img" src="/images/products/<%= product.id %>_<%= product.image%>" alt="">
+                                <%}%>
                             </td>
                             <td>
                                 <div class="email">
@@ -38,10 +42,13 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="price"><%= product.price %></span>
+                                <span class="price"><%= parseFloat(product.price).toFixed(2) %>€</span>
                             </td>
                             <td class="quantity">
-                                <p>1 l</p>
+                                <p><%= product.size %> l</p>
+                            </td>
+                            <td class="quantity">
+                                <p><%= product.degree %> %</p>
                             </td>
                             <td>
                                 <a href="/admin/product/<%= product.id %>" class="btn btn-primary">View item</a>
@@ -61,4 +68,7 @@
             </div>
         </div>
     </div>
+    <%} else{ %>
+        <h3 class="text-center"> There are no products </h3>
+    <%}%>
 </section>

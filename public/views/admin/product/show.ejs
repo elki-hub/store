@@ -2,7 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 mb-5 ftco-animate">
-                <a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img src="/images/prod-1.jpg" class="img-fluid" alt="Colorlib Template"></a>
+                <% if(product.image === null){%>
+                    <a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img src="/images/no-image.png" class="img-fluid" alt="No image"></a>
+                <%} else{ %>
+                        <a href="/images/products/<%= product.id %>_<%= product.image%>" class="image-popup prod-img-bg"><img src="/images/prod-1.jpg" class="img-fluid" alt="No image"></a>
+                <%}%>
             </div>
             <div class="col-lg-6 product-details pl-md-5 ftco-animate">
                 <h3><%= product.name %></h3>

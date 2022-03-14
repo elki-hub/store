@@ -6,7 +6,11 @@
                     <%products.forEach(product => { %>
                         <div class="col-md-4 d-flex">
                             <div class="product ftco-animate">
-                                <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/prod-1.jpg);">
+                                <% if(product.image === null){%>
+                                    <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/no-image.png);">
+                                <%} else{ %>
+                                    <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/products/<%= product.id %>_<%= product.image%>);">
+                                <%}%>
                                     <div class="desc">
                                         <p class="meta-prod d-flex">
                                             <a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
@@ -16,7 +20,7 @@
                                 </div>
                                 <div class="text text-center">
                                     <span class="category"><%= product.category %></span>
-                                    <h2>Bacardi 151</h2>
+                                    <h2><%= product.name %></h2>
                                     <p class="mb-0"><span class="price"><%= product.price %> €</span></p>
                                 </div>
                             </div>

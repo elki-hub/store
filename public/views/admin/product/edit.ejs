@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 ftco-animate">
-                <form action="./<%= product.id %>?_method=PUT" method="POST">
+                <form action="./<%= product.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
                     <%- include('_drinkForm') %>
                 </form>
             </div> <!-- .col-md-8 -->

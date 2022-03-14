@@ -6,9 +6,13 @@ const { port } = require("./config/port");
 const DataBase = require("./config/database");
 const Router = require("./routes/index");
 const path = require("path");
+let fileUpload = require("express-fileupload");
 
 //connecting to database
 DataBase.connect();
+
+//File upload
+app.use(fileUpload());
 
 //View engine setup
 app.set("layout", path.join(__dirname, "../public/views/_layouts/layout"));
