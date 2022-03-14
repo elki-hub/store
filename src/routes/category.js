@@ -68,15 +68,26 @@ router.delete("/:id", async (req, res) => {
 
 function saveCategoryAndRedirect(onErrorRender) {
   return async (req, res) => {
-    console.log(req.body.name);
+    let categoryName = req.body.name;
+    let slug = categoryName.replace(/\s+/g, "-").toLowerCase();
 
-    let category = req.category;
-    category.name = req.body.name;
     try {
+      Category.findOne(
+        { slug: slug, _id: { $ne: req.params.id } },
+        (e, category) => {
+          if (category) {
+            //req.flash("danger", "Category wth this name already exist!");
+            throw "Category wth this name already exist!";
+          }
+        }
+      );
+      let category = req.category;
+      category.name = categoryName;
+
       await category.save();
       res.redirect("../");
     } catch (e) {
-      console.log(e);
+      console.log("catch error: " + e);
       res.render(currentPath + `${onErrorRender}`, {
         layout: layout,
         title: "Categories",

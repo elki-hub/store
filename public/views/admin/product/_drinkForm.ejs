@@ -12,17 +12,18 @@
             <div class="select-wrap">
                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                 <label for="category">Category</label>
-                <select required name="category" id="category" class="form-control">
-                    <% if(categories.length !== 0){
-                    if(productCategory != null){%>
-                        <option value=<%= productCategory.id %>><%= productCategory.name %></option>
-                    <%}categories.forEach(category => {
-                    %>
-                        <option value=<%= category.id %>><%= category.name %></option>
-                    <% }) } else{%>
-                        <option value="">You don't have any categories yet. Add new category firs</option>
-                    <%}%>
-                </select>
+                <select name="category" id="category" class="form-control">
+                <%if(product.category && product.categories.length !== 0){%>
+
+                            <option value="<%= product.category %>"><%= product.categories[0].name %></option>
+                    <%}else{%>
+                            <option value="" selected disabled hidden>--Select--</option>
+                    <%}
+
+                    categories.forEach(category => { %>
+                                <option value="<%= category._id %>"><%= category.name %></option>
+                        <% }) %>
+                        </select>
             </div>
         </div>
     </div>
@@ -35,6 +36,9 @@
                     <% if(countries.length !== 0){
                         if(product.country != null){%>
                             <option value=<%= product.country %>><%= product.country %></option><%}
+                        else{ %>
+                            <option value="" selected disabled hidden>--Select--</option>
+                        <%}
                         countries.forEach(country => {
                         %>
                             <option value=<%= country %>><%= country %></option>

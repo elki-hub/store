@@ -5,14 +5,16 @@
                 <% if(product.image === null){%>
                     <a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img src="/images/no-image.png" class="img-fluid" alt="No image"></a>
                 <%} else{ %>
-                        <a href="/images/products/<%= product.id %>_<%= product.image%>" class="image-popup prod-img-bg"><img src="/images/prod-1.jpg" class="img-fluid" alt="No image"></a>
+                        <a href="/images/products/<%= product._id %>_<%= product.image%>" class="image-popup prod-img-bg"><img src="/images/products/<%= product._id %>_<%= product.image%>" class="img-fluid" alt="No image"></a>
                 <%}%>
             </div>
             <div class="col-lg-6 product-details pl-md-5 ftco-animate">
                 <h3><%= product.name %></h3>
                 <p class="price"><span><%= product.price %> €</span></p>
-                <p>Category: <%= category.name %></p>
-                <p>degree: <%= product.degree %></p>
+                <% if(product.categories.length > 0){%>
+                    <p>Category: <%= product.categories[0].name %></p>
+                <%}%>
+                <p>Degree: <%= product.degree %></p>
 
                 <p><%= product.description %></p>
 

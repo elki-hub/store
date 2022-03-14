@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row justify-content-left">
             <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-                <p class="text-center"><a href="./new/" class="btn btn-primary py-3 px-4">Add new drink</a></p>
+                <p class="text-center"><a href="/admin/product/new/" class="btn btn-primary py-3 px-4">Add new drink</a></p>
             </div>
         </div>
     </div>
@@ -27,18 +27,18 @@
                     <%products.forEach(product => { %>
                         <tr class="alert" role="alert">
                             <td>
-
-
-                            <% if(product.image === null){%>
+                            <% if(product.image === null || product.image === undefined){%>
                                     <img class="img" src="/images/no-image.png" alt="">
-                                <%} else{ %>
-                                    <img class="img" src="/images/products/<%= product.id %>_<%= product.image%>" alt="">
+                                <%} else{%>
+                                    <img class="img" src="/images/products/<%= product._id %>_<%= product.image%>" alt="">
                                 <%}%>
                             </td>
                             <td>
                                 <div class="email">
                                     <span><%= product.name %></span>
-                                    <span><%= product.category %> </span>
+                                    <% if(product.categories.length > 0){%>
+                                        <span><%= product.categories[0].name %> </span>
+                                    <%}%>
                                 </div>
                             </td>
                             <td>
@@ -51,13 +51,13 @@
                                 <p><%= product.degree %> %</p>
                             </td>
                             <td>
-                                <a href="/admin/product/<%= product.id %>" class="btn btn-primary">View item</a>
+                                <a href="/admin/product/<%= product._id %>" class="btn btn-primary">View item</a>
                             </td>
                             <td>
-                                <a href="/admin/product/edit/<%= product.id %>" class="btn btn-info">Edit</a>
+                                <a href="/admin/product/edit/<%= product._id %>" class="btn btn-info">Edit</a>
                             </td>
                             <td>
-                                <form action="./<%= product.id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
+                                <form action="/admin/product/<%= product._id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>

@@ -6,16 +6,18 @@ const country = require("country-list-js");
 const viewsProductPath = "admin/product/";
 const layout = "_layouts/admin_layout";
 let fs = require("fs-extra");
-let resizeImg = require("resize-img");
+const {
+  getProductsWithCategories,
+  getProductById,
+} = require("../modules/product");
 
 router.get("/", async (req, res) => {
-  let products = await Product.find().sort({ name: "desc" });
   const categories = await Category.find().sort({ name: "desc" });
 
   res.render(viewsProductPath + "product", {
     layout: layout,
     title: "Products",
-    products: products,
+    products: await getProductsWithCategories(),
     categories: categories,
   });
 });
@@ -23,39 +25,46 @@ router.get("/", async (req, res) => {
 router.get("/new", async (req, res) => {
   const categories = await Category.find().sort({ name: "desc" });
 
-  //console.log(country.names());
-
+  if (categories == null) {
+    //You don't have any categories yet. Add new category firs
+    res.redirect("/");
+  }
   res.render(viewsProductPath + "new", {
     layout: layout,
     title: "Add new Drink",
     categories: categories,
     product: new Product(),
-    productCategory: null,
-    countries: country.names(),
+    countries: country.names().sort(),
   });
 });
 
 router.get("/edit/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await getProductById(req.params.id);
+  const categories = await Category.find().sort({ name: "desc" });
 
-  if (product == null) res.redirect("/");
+  if (categories == null) {
+    //You don't have any categories yet. Add new category firs
+    res.redirect("/");
+  }
+  if (product == null) {
+    res.redirect("/");
+  }
+
   res.render(viewsProductPath + "edit", {
     layout: layout,
     title: "Edit Drink",
-    categories: await Category.find().sort({ name: "desc" }),
+    categories: categories,
     product: product,
-    productCategory: await Category.findById(product.category),
-    countries: country.names(),
+    countries: country.names().sort(),
   });
 });
 
 router.get("/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await getProductById(req.params.id);
   if (product == null) res.redirect("/");
   res.render(viewsProductPath + "show", {
     layout: layout,
     title: "View Drink",
-    category: await Category.findById(product.category),
     product: product,
   });
 });
@@ -79,9 +88,21 @@ router.put(
 );
 
 router.delete("/:id", async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  //req.flash("success", "Category was deleted");
-  res.redirect("./");
+  try {
+    let product = await Product.findById(req.params.id);
+    if (product.image !== undefined || product.image !== null) {
+      await fs.remove(
+        "public/images/products/" + product.id + "_" + product.image
+      );
+    }
+
+    await Product.findByIdAndDelete(req.params.id);
+    //req.flash("success", "Category was deleted");
+    res.redirect("./");
+  } catch (e) {
+    console.log(e);
+    res.redirect("./");
+  }
 });
 
 function saveDrinkAndRedirect(onErrorRender) {
@@ -98,7 +119,9 @@ function saveDrinkAndRedirect(onErrorRender) {
     product.price = price;
     product.country = country;
     product.size = size;
-    product.image = image;
+    if (image !== null) {
+      product.image = image;
+    }
     product.degree = degree;
     product.description = description;
 
