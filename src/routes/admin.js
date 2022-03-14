@@ -5,7 +5,7 @@ const CategoryRouter = require("./category");
 const Product = require("./../models/product");
 const Category = require("./../models/category");
 const currentPath = "admin/";
-const { getProductsWithCategories } = require("../modules/product");
+const { getProductsWithCategories } = require("../utils/product");
 
 router.use("/product", ProductRouter);
 router.use("/category", CategoryRouter);

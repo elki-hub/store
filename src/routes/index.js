@@ -5,8 +5,8 @@ const Product = require("./../models/product");
 const Category = require("./../models/category");
 const {
   getProductsWithCategories,
-  getProductById,
-} = require("../modules/product");
+  getProductWithCategoryById,
+} = require("../utils/product");
 
 router.get("/", async (req, res) => {
   res.render("index", {
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/product/:id", async (req, res) => {
-  const product = await getProductById(req.params.id);
+  const product = await getProductWithCategoryById(req.params.id);
   if (product == null) res.redirect("/");
   res.render("admin/product/show", {
     title: "View Drink",

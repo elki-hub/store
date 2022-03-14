@@ -40,9 +40,28 @@
             </div>
         </div>
     </section>
+      <% if (typeof success != 'undefined') { %>
+          <div class="alert alert-success">
+              <strong>Success!</strong> <%= success %>
+          </div>
+      <%}%>
+      <% if (typeof failure != 'undefined') { %>
+          <div class="alert alert-warning">
+              <strong>Failure! </strong> <%= failure %>
+          </div>
+      <%}%>
+
 
     <%- body%>
 
+
+      <% if (typeof error != 'undefined') { %>
+          <script type="text/javascript">
+            alert("Error code: <%= error.status %>"+
+              "\n"+
+              " <%= error.message %>");
+          </script>
+      <% }%>
 
     <!--Empty space before footer-->
     <div class="row mt-5 pt-3 d-flex">

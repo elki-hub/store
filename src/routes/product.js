@@ -1,36 +1,43 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("./../models/product");
-const Category = require("./../models/category");
 const country = require("country-list-js");
 const viewsProductPath = "admin/product/";
-const layout = "_layouts/admin_layout";
-let fs = require("fs-extra");
+const adminLayout = "_layouts/admin_layout";
+const { noCategories, productWasNotFound } = require("../utils/errors");
 const {
   getProductsWithCategories,
-  getProductById,
-} = require("../modules/product");
+  getProductWithCategoryById,
+  deleteProduct,
+  createNewProduct,
+  editProduct,
+  saveDrink,
+} = require("../utils/product");
+const { getCategories } = require("../utils/categories");
 
 router.get("/", async (req, res) => {
-  const categories = await Category.find().sort({ name: "desc" });
-
   res.render(viewsProductPath + "product", {
-    layout: layout,
+    layout: adminLayout,
     title: "Products",
     products: await getProductsWithCategories(),
-    categories: categories,
   });
 });
 
 router.get("/new", async (req, res) => {
-  const categories = await Category.find().sort({ name: "desc" });
+  const categories = await getCategories();
 
-  if (categories == null) {
-    //You don't have any categories yet. Add new category firs
-    res.redirect("/");
+  if (categories === undefined) {
+    return res
+      .status(noCategories.status)
+      .render(viewsProductPath + "product", {
+        failure: noCategories.message,
+        layout: adminLayout,
+        title: "Products",
+        products: await getProductsWithCategories(),
+      });
   }
   res.render(viewsProductPath + "new", {
-    layout: layout,
+    layout: adminLayout,
     title: "Add new Drink",
     categories: categories,
     product: new Product(),
@@ -39,19 +46,34 @@ router.get("/new", async (req, res) => {
 });
 
 router.get("/edit/:id", async (req, res) => {
-  const product = await getProductById(req.params.id);
-  const categories = await Category.find().sort({ name: "desc" });
+  const product = await getProductWithCategoryById(req.params.id);
+  const categories = await getCategories();
 
-  if (categories == null) {
-    //You don't have any categories yet. Add new category firs
-    res.redirect("/");
+  if (categories === undefined) {
+    return res
+      .status(noCategories.status)
+      .render(viewsProductPath + "product", {
+        failure: noCategories.message,
+        layout: adminLayout,
+        title: "Products",
+        products: await getProductsWithCategories(),
+        categories: null,
+      });
   }
-  if (product == null) {
-    res.redirect("/");
+  if (product === undefined) {
+    return res
+      .status(productWasNotFound.status)
+      .render(viewsProductPath + "product", {
+        failure: productWasNotFound.message,
+        layout: adminLayout,
+        title: "Products",
+        products: await getProductsWithCategories(),
+        categories: categories,
+      });
   }
 
   res.render(viewsProductPath + "edit", {
-    layout: layout,
+    layout: adminLayout,
     title: "Edit Drink",
     categories: categories,
     product: product,
@@ -60,100 +82,47 @@ router.get("/edit/:id", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const product = await getProductById(req.params.id);
-  if (product == null) res.redirect("/");
+  const product = await getProductWithCategoryById(req.params.id);
+
+  if (product.length === undefined) {
+    return res
+      .status(productWasNotFound.status)
+      .render(viewsProductPath + "product", {
+        failure: productWasNotFound.message,
+        layout: adminLayout,
+        title: "Products",
+        products: await getProductsWithCategories(),
+        categories: categories,
+      });
+  }
+
   res.render(viewsProductPath + "show", {
-    layout: layout,
+    layout: adminLayout,
     title: "View Drink",
     product: product,
   });
 });
 
-router.post(
-  "/new",
-  async (req, res, next) => {
-    req.product = new Product();
-    next();
-  },
-  saveDrinkAndRedirect("new")
-);
-
-router.put(
-  "/edit/:id",
-  async (req, res, next) => {
-    req.product = await Product.findById(req.params.id);
-    next();
-  },
-  saveDrinkAndRedirect("edit")
-);
-
-router.delete("/:id", async (req, res) => {
-  try {
-    let product = await Product.findById(req.params.id);
-    if (product.image !== undefined || product.image !== null) {
-      await fs.remove(
-        "public/images/products/" + product.id + "_" + product.image
-      );
-    }
-
-    await Product.findByIdAndDelete(req.params.id);
-    //req.flash("success", "Category was deleted");
-    res.redirect("./");
-  } catch (e) {
-    console.log(e);
-    res.redirect("./");
-  }
+router.post("/new", createNewProduct, saveDrink, async (req, res, next) => {
+  res.render(viewsProductPath + "product", {
+    success: "New product was added",
+    layout: adminLayout,
+    title: "Products",
+    products: await getProductsWithCategories(),
+  });
 });
 
-function saveDrinkAndRedirect(onErrorRender) {
-  return async (req, res) => {
-    let { name, category, country, price, degree, size, description } =
-      req.body;
+router.put("/edit/:id", editProduct, saveDrink, async (req, res, next) => {
+  res.render(viewsProductPath + "product", {
+    success: "Product was successfully changed",
+    layout: adminLayout,
+    title: "Products",
+    products: await getProductsWithCategories(),
+  });
+});
 
-    let image = req.files !== null ? req.files.image.name : null;
-    let product = req.product;
-    let oldProductImage = await product.image;
-
-    product.name = name;
-    product.category = category;
-    product.price = price;
-    product.country = country;
-    product.size = size;
-    if (image !== null) {
-      product.image = image;
-    }
-    product.degree = degree;
-    product.description = description;
-
-    try {
-      await product.save();
-
-      //adding photo to gallery
-      if (image !== null) {
-        let productImage = req.files.image;
-
-        await fs.remove(
-          "public/images/products/" + product.id + "_" + oldProductImage
-        );
-
-        await productImage.mv(
-          "public/images/products/" + product.id + "_" + image,
-          function (err) {
-            return console.log(err);
-          }
-        );
-      }
-
-      res.redirect("../");
-    } catch (e) {
-      console.log(e);
-      res.render(viewsProductPath + `${onErrorRender}`, {
-        layout: layout,
-        title: "Products",
-        product: product,
-      });
-    }
-  };
-}
+router.delete("/:id", deleteProduct, async (req, res) => {
+  res.redirect("./");
+});
 
 module.exports = router;
