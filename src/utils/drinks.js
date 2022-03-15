@@ -1,13 +1,13 @@
-const Product = require("../models/product");
+const Drinks = require("../models/drink");
 let fs = require("fs-extra");
 const { internalError } = require("../utils/errors");
-const renderOnError = "admin/product/product";
+const renderOnError = "admin/drink/drink";
 const adminLayout = "_layouts/admin_layout";
 const { getCategories } = require("../utils/categories");
 
-async function getProductsWithCategories() {
+async function getDrinksWithCategories() {
   try {
-    return await Product.aggregate([
+    return await Drinks.aggregate([
       {
         $set: {
           category: { $toObjectId: "$category" },
@@ -28,9 +28,9 @@ async function getProductsWithCategories() {
   }
 }
 
-async function getProductWithCategoryById(id) {
+async function getDrinkWithCategoryById(id) {
   try {
-    let products = await Product.aggregate([
+    let drinks = await Drinks.aggregate([
       {
         $set: {
           id: { $toString: "$_id" },
@@ -51,31 +51,29 @@ async function getProductWithCategoryById(id) {
         },
       },
     ]);
-    return products[0];
+    return drinks[0];
   } catch (error) {
     console.log(error);
     return [];
   }
 }
 
-async function getProductById(id) {
+async function getDrinkById(id) {
   try {
-    return await Product.findById(id);
+    return await Drinks.findById(id);
   } catch (error) {
     console.log(error);
     return [];
   }
 }
 
-async function deleteProduct(req, res, next) {
+async function deleteDrink(req, res, next) {
   try {
-    let product = await Product.findById(req.params.id);
-    if (product.image !== undefined || product.image !== null) {
-      await fs.remove(
-        "public/images/products/" + product.id + "_" + product.image
-      );
+    let drink = await Drinks.findById(req.params.id);
+    if (drink.image !== undefined || drink.image !== null) {
+      await fs.remove("public/images/drinks/" + drink.id + "_" + drink.image);
     }
-    await Product.findByIdAndDelete(req.params.id);
+    await Drinks.findByIdAndDelete(req.params.id);
 
     return next();
   } catch (e) {
@@ -84,19 +82,19 @@ async function deleteProduct(req, res, next) {
       error: internalError.message,
       layout: adminLayout,
       title: "Products",
-      products: await getProductsWithCategories(),
+      drinks: await getDrinksWithCategories(),
       categories: await getCategories(),
     });
   }
 }
 
-async function createNewProduct(req, res, next) {
-  req.product = new Product();
+async function createNewDrink(req, res, next) {
+  req.drink = new Drinks();
   return next();
 }
 
-async function editProduct(req, res, next) {
-  req.product = await getProductById(req.params.id);
+async function editDrink(req, res, next) {
+  req.drink = await getDrinkById(req.params.id);
   return next();
 }
 
@@ -106,31 +104,31 @@ async function saveDrink(req, res, next) {
       req.body;
 
     let image = req.files !== null ? req.files.image.name : null;
-    let product = req.product;
-    let oldProductImage = await product.image;
+    let drink = req.drink;
+    let oldProductImage = await drink.image;
 
-    product.name = name;
-    product.category = category;
-    product.price = price;
-    product.country = country;
-    product.size = size;
+    drink.name = name;
+    drink.category = category;
+    drink.price = price;
+    drink.country = country;
+    drink.size = size;
     if (image !== null) {
-      product.image = image;
+      drink.image = image;
     }
-    product.degree = degree;
-    product.description = description;
+    drink.degree = degree;
+    drink.description = description;
 
-    await product.save();
+    await drink.save();
 
     //adding photo to gallery
     if (image !== null) {
-      let productImage = req.files.image;
+      let drinkImage = req.files.image;
       await fs.remove(
-        "public/images/products/" + product.id + "_" + oldProductImage
+        "public/images/drinks/" + drink.id + "_" + oldProductImage
       );
 
-      await productImage.mv(
-        "public/images/products/" + product.id + "_" + image,
+      await drinkImage.mv(
+        "public/images/drinks/" + drink.id + "_" + image,
         function (err) {
           if (err) {
             console.log("error adding img: " + err);
@@ -146,18 +144,18 @@ async function saveDrink(req, res, next) {
       error: internalError.message,
       layout: adminLayout,
       title: "Products",
-      products: await getProductsWithCategories(),
+      drinks: await getDrinksWithCategories(),
       categories: await getCategories(),
     });
   }
 }
 
 module.exports = {
-  getProductsWithCategories,
-  getProductWithCategoryById,
-  getProductById,
-  deleteProduct,
-  createNewProduct,
-  editProduct,
+  getDrinksWithCategories,
+  getDrinkWithCategoryById,
+  getDrinkById,
+  deleteDrink,
+  createNewDrink,
+  editDrink,
   saveDrink,
 };

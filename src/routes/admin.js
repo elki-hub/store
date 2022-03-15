@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const ProductRouter = require("./product");
 const CategoryRouter = require("./category");
-const Product = require("./../models/product");
+const Product = require("../models/drink");
 const Category = require("./../models/category");
 const currentPath = "admin/";
-const { getProductsWithCategories } = require("../utils/product");
+const { getDrinksWithCategories } = require("../utils/drinks");
 
-router.use("/product", ProductRouter);
+router.use("/drink", ProductRouter);
 router.use("/category", CategoryRouter);
 
 router.get("/", async (req, res) => {
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     layout: "_layouts/admin_layout",
     title: "Admin Page",
     categories: categories,
-    products: await getProductsWithCategories(),
+    drinks: await getDrinksWithCategories(),
   });
 });
 

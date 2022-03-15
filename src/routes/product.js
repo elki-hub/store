@@ -1,25 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("./../models/product");
+const Drink = require("../models/drink");
 const country = require("country-list-js");
-const viewsProductPath = "admin/product/";
+const viewsDrinkPath = "admin/drink/";
 const adminLayout = "_layouts/admin_layout";
 const { noCategories, productWasNotFound } = require("../utils/errors");
 const {
-  getProductsWithCategories,
-  getProductWithCategoryById,
-  deleteProduct,
-  createNewProduct,
-  editProduct,
+  getDrinksWithCategories,
+  getDrinkWithCategoryById,
+  deleteDrink,
+  createNewDrink,
+  editDrink,
   saveDrink,
-} = require("../utils/product");
+} = require("../utils/drinks");
 const { getCategories } = require("../utils/categories");
 
 router.get("/", async (req, res) => {
-  res.render(viewsProductPath + "product", {
+  res.render(viewsDrinkPath + "drink", {
     layout: adminLayout,
-    title: "Products",
-    products: await getProductsWithCategories(),
+    title: "Drinks",
+    drinks: await getDrinksWithCategories(),
   });
 });
 
@@ -27,101 +27,97 @@ router.get("/new", async (req, res) => {
   const categories = await getCategories();
 
   if (categories === undefined) {
-    return res
-      .status(noCategories.status)
-      .render(viewsProductPath + "product", {
-        failure: noCategories.message,
-        layout: adminLayout,
-        title: "Products",
-        products: await getProductsWithCategories(),
-      });
+    return res.status(noCategories.status).render(viewsDrinkPath + "drink", {
+      failure: noCategories.message,
+      layout: adminLayout,
+      title: "Drinks",
+      drinks: await getDrinksWithCategories(),
+    });
   }
-  res.render(viewsProductPath + "new", {
+  res.render(viewsDrinkPath + "new", {
     layout: adminLayout,
     title: "Add new Drink",
     categories: categories,
-    product: new Product(),
+    drink: new Drink(),
     countries: country.names().sort(),
   });
 });
 
 router.get("/edit/:id", async (req, res) => {
-  const product = await getProductWithCategoryById(req.params.id);
+  const drink = await getDrinkWithCategoryById(req.params.id);
   const categories = await getCategories();
 
   if (categories === undefined) {
-    return res
-      .status(noCategories.status)
-      .render(viewsProductPath + "product", {
-        failure: noCategories.message,
-        layout: adminLayout,
-        title: "Products",
-        products: await getProductsWithCategories(),
-        categories: null,
-      });
+    return res.status(noCategories.status).render(viewsDrinkPath + "drink", {
+      failure: noCategories.message,
+      layout: adminLayout,
+      title: "drinks",
+      drinks: await getDrinksWithCategories(),
+      categories: null,
+    });
   }
-  if (product === undefined) {
+  if (drink === undefined) {
     return res
       .status(productWasNotFound.status)
-      .render(viewsProductPath + "product", {
+      .render(viewsDrinkPath + "drink", {
         failure: productWasNotFound.message,
         layout: adminLayout,
-        title: "Products",
-        products: await getProductsWithCategories(),
+        title: "Drinks",
+        drinks: await getDrinksWithCategories(),
         categories: categories,
       });
   }
 
-  res.render(viewsProductPath + "edit", {
+  res.render(viewsDrinkPath + "edit", {
     layout: adminLayout,
     title: "Edit Drink",
     categories: categories,
-    product: product,
+    drink: drink,
     countries: country.names().sort(),
   });
 });
 
 router.get("/:id", async (req, res) => {
-  const product = await getProductWithCategoryById(req.params.id);
+  const drink = await getDrinkWithCategoryById(req.params.id);
 
-  if (product.length === undefined) {
+  if (drink === undefined) {
     return res
       .status(productWasNotFound.status)
-      .render(viewsProductPath + "product", {
+      .render(viewsDrinkPath + "drink", {
         failure: productWasNotFound.message,
         layout: adminLayout,
-        title: "Products",
-        products: await getProductsWithCategories(),
-        categories: categories,
+        title: "Drinks",
+        drinks: await getDrinksWithCategories(),
+        categories: await getCategories(),
       });
   }
 
-  res.render(viewsProductPath + "show", {
+  res.render(viewsDrinkPath + "show", {
     layout: adminLayout,
     title: "View Drink",
-    product: product,
+    drink: drink,
   });
 });
 
-router.post("/new", createNewProduct, saveDrink, async (req, res, next) => {
-  res.render(viewsProductPath + "product", {
-    success: "New product was added",
+router.post("/new", createNewDrink, saveDrink, async (req, res, next) => {
+  res.render(viewsDrinkPath + "drink", {
+    success: "New drink was added",
     layout: adminLayout,
-    title: "Products",
-    products: await getProductsWithCategories(),
+    title: "Drinks",
+    drinks: await getDrinksWithCategories(),
   });
 });
 
-router.put("/edit/:id", editProduct, saveDrink, async (req, res, next) => {
-  res.render(viewsProductPath + "product", {
-    success: "Product was successfully changed",
+router.put("/edit/:id", editDrink, saveDrink, async (req, res, next) => {
+  res.render(viewsDrinkPath + "drink", {
+    success: "Drink was successfully changed",
     layout: adminLayout,
-    title: "Products",
-    products: await getProductsWithCategories(),
+    title: "Drinks",
+    drinks: await getDrinksWithCategories(),
   });
 });
 
-router.delete("/:id", deleteProduct, async (req, res) => {
+router.delete("/:id", deleteDrink, async (req, res) => {
   res.redirect("./");
 });
 

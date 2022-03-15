@@ -3,53 +3,53 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
-                    <%products.forEach(product => { %>
+                    <%drinks.forEach(drink => { %>
                         <div class="col-md-4 d-flex">
                             <div class="product ftco-animate">
-                                <% if(product.image === null || product.image === undefined){%>
+                                <% if(drink.image === null || drink.image === undefined){%>
                                     <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/no-image.png);">
                                 <%} else{ %>
-                                    <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/products/<%= product._id %>_<%= product.image%>);">
+                                    <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/images/drinks/<%= drink._id %>_<%= drink.image%>);">
                                 <%}%>
                                     <div class="desc">
                                         <p class="meta-prod d-flex">
                                             <a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
-                                            <a href="/product/<%= product._id %>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
+                                            <a href="/drink/<%= drink._id %>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="text text-center">
-                                    <% if(product.categories.length > 0){ %>
-                                        <span class="category"><%= product.categories[0].name %> </span>
+                                    <% if(drink.categories.length > 0){ %>
+                                        <span class="category"><%= drink.categories[0].name %> </span>
                                     <%}%>
-                                    <h2><%= product.name %></h2>
-                                    <p class="mb-0"><span class="price"><%= product.price %> €</span></p>
+                                    <h2><%= drink.name %></h2>
+                                    <p class="mb-0"><span class="price"><%= drink.price %> €</span></p>
                                 </div>
                             </div>
                         </div>
                     <% }) %>
                 </div>
-                <div class="row mt-5">
-                    <div class="col text-center">
-                        <div class="block-27">
-                            <ul>
-                                <li><a href="#">&lt;</a></li>
-                                <li class="active"><span>1</span></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">&gt;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="row mt-5">-->
+<!--                    <div class="col text-center">-->
+<!--                        <div class="block-27">-->
+<!--                            <ul>-->
+<!--                                <li><a href="#">&lt;</a></li>-->
+<!--                                <li class="active"><span>1</span></li>-->
+<!--                                <li><a href="#">2</a></li>-->
+<!--                                <li><a href="#">3</a></li>-->
+<!--                                <li><a href="#">4</a></li>-->
+<!--                                <li><a href="#">5</a></li>-->
+<!--                                <li><a href="#">&gt;</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
             <div class="col-md-3">
                 <div class="sidebar-box ftco-animate">
                     <div class="categories">
-                        <h3>Product Types</h3>
+                        <h3>Drinks Types</h3>
                         <ul class="p-0">
                             <% categories.forEach( category => {%>
                                 <li><a href="#"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>

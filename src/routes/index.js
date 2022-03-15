@@ -1,25 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const AdminRouter = require("./admin");
-const Product = require("./../models/product");
+const Product = require("../models/drink");
 const Category = require("./../models/category");
 const {
-  getProductsWithCategories,
-  getProductWithCategoryById,
-} = require("../utils/product");
+  getDrinksWithCategories,
+  getDrinkWithCategoryById,
+} = require("../utils/drinks");
 
 router.get("/", async (req, res) => {
   res.render("index", {
     title: "Good Drink for Good Moments",
     categories: await Category.find().sort({ name: "desc" }),
-    products: await getProductsWithCategories(),
+    drinks: await getDrinksWithCategories(),
   });
 });
 
-router.get("/product/:id", async (req, res) => {
-  const product = await getProductWithCategoryById(req.params.id);
+router.get("/drink/:id", async (req, res) => {
+  const product = await getDrinkWithCategoryById(req.params.id);
   if (product == null) res.redirect("/");
-  res.render("admin/product/show", {
+  res.render("admin/drink/show", {
     title: "View Drink",
     product: product,
   });

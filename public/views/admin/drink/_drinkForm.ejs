@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="name">Name</label>
-            <input required value="<%= product.name %>" type="text" name="name" id="name" class="form-control">
+            <input required value="<%= drink.name %>" type="text" name="name" id="name" class="form-control">
         </div>
     </div>
     <div class="w-100"></div>
@@ -13,9 +13,9 @@
                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control">
-                <%if(product.category && product.categories.length !== 0){%>
+                <%if(drink.category && drink.categories.length !== 0){%>
 
-                            <option value="<%= product.category %>"><%= product.categories[0].name %></option>
+                            <option value="<%= drink.category %>"><%= drink.categories[0].name %></option>
                     <%}else{%>
                             <option value="" selected disabled hidden>--Select--</option>
                     <%}
@@ -34,8 +34,8 @@
                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                 <select name="country" id="country" class="form-control">
                     <% if(countries.length !== 0){
-                        if(product.country != null){%>
-                            <option value=<%= product.country %>><%= product.country %></option><%}
+                        if(drink.country != null){%>
+                            <option value=<%= drink.country %>><%= drink.country %></option><%}
                         else{ %>
                             <option value="" selected disabled hidden>--Select--</option>
                         <%}
@@ -54,19 +54,19 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="price">Price €</label>
-            <input required name="price" id="price" value="<%= product.price %>" class="form-control">
+            <input required name="price" id="price" value="<%= drink.price %>" class="form-control">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Degree %</label>
-            <input required name="degree" id="degree" value="<%= product.degree %>" class="form-control">
+            <input required name="degree" id="degree" value="<%= drink.degree %>" class="form-control">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Size l</label>
-            <input required name="size" id="size" value="<%= product.size %>" class="form-control">
+            <input required name="size" id="size" value="<%= drink.size %>" class="form-control">
         </div>
     </div>
 
@@ -74,13 +74,13 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" id="description" rows="5" class="form-control"><%= product.description %></textarea>
+            <textarea name="description" id="description" rows="5" class="form-control"><%= drink.description %></textarea>
         </div>
     </div>
     <div class="w-100"></div>
-    <% if (product.image) { %>
+    <% if (drink.image) { %>
         <div class="col-md-2">
-            <img src="/images/products/<%= product.id %>_<%= product.image %>" id="imgPreview" class="img" alt="" height="100">
+            <img src="/images/drinks/<%= drink.id %>_<%= drink.image %>" id="imgPreview" class="img" alt="" height="100">
             <p> Current image</p>
         </div>
     <% }%>

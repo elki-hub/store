@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Decimal128 } = require("mongodb");
 const { Schema, model } = mongoose;
 
-const ProductSchema = new Schema({
+const DrinkSchema = new Schema({
   name: {
     type: String,
     required: [true, "Product name is required"],
@@ -10,7 +10,7 @@ const ProductSchema = new Schema({
   category: String,
   price: {
     type: Decimal128,
-    required: [true, "product price is required"],
+    required: [true, "drink price is required"],
     min: [0.01, "Product price cannot be below 0"],
   },
   country: {
@@ -18,7 +18,7 @@ const ProductSchema = new Schema({
   },
   size: {
     type: Decimal128,
-    required: [true, "product size is required"],
+    required: [true, "drink size is required"],
     min: [0.01, "Product size cannot be below 0"],
   },
   image: {
@@ -26,10 +26,10 @@ const ProductSchema = new Schema({
   },
   degree: {
     type: Decimal128,
-    required: [true, "product degree is required"],
+    required: [true, "drink degree is required"],
     min: [0, "Product degree cannot be below 0"],
   },
   description: String,
 });
 
-module.exports = model("Product", ProductSchema);
+module.exports = model("Drink", DrinkSchema);

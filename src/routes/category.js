@@ -16,11 +16,11 @@ router.get("/", async (req, res) => {
 /*router.get("/:name", async (req, res) => {
   const category = await Category.findOne({ name: req.params.name });
   if (category == null) res.redirect("/");
-  res.render(currentPath + "product/product", {
+  res.render(currentPath + "drink/drink", {
     layout: layout,
     title: category.name + " drinks",
     category: category,
-    products: await Product.find({ category: category.id }).sort({
+    drinks: await Product.find({ category: category.id }).sort({
       name: "desc",
     }),
   });

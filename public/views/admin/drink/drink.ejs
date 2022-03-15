@@ -2,11 +2,11 @@
     <div class="container">
         <div class="row justify-content-left">
             <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-                <p class="text-center"><a href="/admin/product/new/" class="btn btn-primary py-3 px-4">Add new drink</a></p>
+                <p class="text-center"><a href="/admin/drink/new/" class="btn btn-primary py-3 px-4">Add new drink</a></p>
             </div>
         </div>
     </div>
-    <% if(products.length > 0 ){ %>
+    <% if(drinks.length > 0 ){ %>
     <div class="container">
         <div class="row">
             <div class="table-wrap">
@@ -14,7 +14,7 @@
                     <thead class="thead-primary">
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Product</th>
+                        <th>Drinks</th>
                         <th>Price</th>
                         <th>Size</th>
                         <th>Degrees</th>
@@ -24,40 +24,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <%products.forEach(product => { %>
+                    <%drinks.forEach(drink => { %>
                         <tr class="alert" role="alert">
                             <td>
-                            <% if(product.image === null || product.image === undefined){%>
+                            <% if(drink.image === null || drink.image === undefined){%>
                                     <img class="img" src="/images/no-image.png" alt="">
                                 <%} else{%>
-                                    <img class="img" src="/images/products/<%= product._id %>_<%= product.image%>" alt="">
+                                    <img class="img" src="/images/drinks/<%= drink._id %>_<%= drink.image%>" alt="">
                                 <%}%>
                             </td>
                             <td>
                                 <div class="email">
-                                    <span><%= product.name %></span>
-                                    <% if(product.categories.length > 0){%>
-                                        <span><%= product.categories[0].name %> </span>
+                                    <span><%= drink.name %></span>
+                                    <% if(drink.categories.length > 0){%>
+                                        <span><%= drink.categories[0].name %> </span>
                                     <%}%>
                                 </div>
                             </td>
                             <td>
-                                <span class="price"><%= parseFloat(product.price).toFixed(2) %>€</span>
+                                <span class="price"><%= parseFloat(drink.price).toFixed(2) %>€</span>
                             </td>
                             <td class="quantity">
-                                <p><%= product.size %> l</p>
+                                <p><%= drink.size %> l</p>
                             </td>
                             <td class="quantity">
-                                <p><%= product.degree %> %</p>
+                                <p><%= drink.degree %> %</p>
                             </td>
                             <td>
-                                <a href="/admin/product/<%= product._id %>" class="btn btn-primary">View item</a>
+                                <a href="/admin/drink/<%= drink._id %>" class="btn btn-primary">View item</a>
                             </td>
                             <td>
-                                <a href="/admin/product/edit/<%= product._id %>" class="btn btn-info">Edit</a>
+                                <a href="/admin/drink/edit/<%= drink._id %>" class="btn btn-info">Edit</a>
                             </td>
                             <td>
-                                <form action="/admin/product/<%= product._id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
+                                <form action="/admin/drink/<%= drink._id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
@@ -69,6 +69,6 @@
         </div>
     </div>
     <%} else{ %>
-        <h3 class="text-center"> There are no products </h3>
+        <h3 class="text-center"> There are no drinks </h3>
     <%}%>
 </section>
