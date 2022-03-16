@@ -9,13 +9,13 @@
 
     <div class="container">
         <div class="row">
-            <div class="table-wrap">
+            <div class="table">
                 <table class="table">
                     <thead class="thead-primary">
                     <tr>
                         <th>&nbsp;</th>
                         <th>Category name</th>
-                        <th></th>
+                        <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -42,7 +42,7 @@
                             </td>
                             <td>
                                 <form action="/admin/category/<%= category.id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this category?');">Delete</button>
                                 </form>
                             </td>
                         </tr>

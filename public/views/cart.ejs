@@ -1,0 +1,97 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                    <p class="text-center"><a href="/cart/clear" class="btn btn-primary py-3 px-4" onclick="return confirm('Are you sure you want to clear cart?');">Remove all</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="table">
+                <%let total = 0;%>
+                <% if(typeof cart !== "undefined" ){ %>
+                <table class="table">
+                    <thead class="thead-primary">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>total</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% cart.forEach(product => {
+                    console.log(product)%>
+                        <tr class="alert" role="alert">
+                            <td>
+                                <% if(product.image === null || product.image === undefined){%>
+                                    <div class="img" style="background-image: url(/images/no-image.png);"></div>
+                                <%} else{%>
+                                    <div class="img" style="background-image: url(/images/drinks/<%= product.id %>_<%= product.image%>);"></div>
+                                <%}%>
+                            </td>
+                            <td>
+                                <div class="email">
+                                    <span><%= product.name %></span>
+                                    <span></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="price"><%= parseFloat(product.price).toFixed(2) %> €</span>
+                            </td>
+                            <td>
+                                <div>
+                                    <a href="/cart/update/<%= product.id %>?action=add" type="button" class="close" style="float: none; padding: 4px;">
+                                        <span aria-hidden="true"><i class="fa fa-plus"></i></span>
+                                    </a>
+                                    <span ><%= product.quantity %></span>
+                                    <a href="/cart/update/<%= product.id %>?action=remove" type="button" class="close" style="float: none; padding: 4px;">
+                                        <span aria-hidden="true"><i class="fa fa-minus"></i></span>
+                                    </a>
+                                </div>
+                            </td>
+                            <% total += product.price * product.quantity%>
+                            <td><%= parseFloat(product.price * product.quantity).toFixed(2)%> €</td>
+                            <td>
+                                <a href="/cart/update/<%= product.id %>?action=clear" type="button" class="close">
+                                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                                </a>
+                            </td>
+                        </tr>
+                    <%})%>
+                    </tbody>
+                </table>
+                <%} else{ %>
+                    <table class="table">
+                            <thead class="thead-primary">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>total</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                    </table>
+                    <h3 class="text-center"> Your cart is empty </h3>
+                <%}%>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col col-lg-5 col-md-6 mt-5 cart-wrap">
+                <div class="cart-total mb-3">
+                    <p class="d-flex total-price">
+                        <span>Total</span>
+                        <span><%= parseFloat(total).toFixed(2) %>  €</span>
+                    </p>
+                </div>
+                <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+            </div>
+        </div>
+    </div>
+</section>

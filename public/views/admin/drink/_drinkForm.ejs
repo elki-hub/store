@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="name">Name</label>
-            <input required value="<%= drink.name %>" type="text" name="name" id="name" class="form-control">
+            <input required value="<%= drink.name %>" type="text" name="name" id="name" class="form-control" maxlength="100">
         </div>
     </div>
     <div class="w-100"></div>
@@ -54,19 +54,19 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="price">Price €</label>
-            <input required name="price" id="price" value="<%= drink.price %>" class="form-control">
+            <input required type="number" name="price" id="price" value="<%= drink.price %>" class="form-control" maxlength="6" max="2000">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Degree %</label>
-            <input required name="degree" id="degree" value="<%= drink.degree %>" class="form-control">
+            <input required type="number" name="degree" id="degree" value="<%= drink.degree %>" class="form-control" maxlength="5" max="100">
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="degree">Size l</label>
-            <input required name="size" id="size" value="<%= drink.size %>" class="form-control">
+            <input required  type="number" name="size" id="size" value="<%= drink.size %>" class="form-control" maxlength="5" max="50">
         </div>
     </div>
 
@@ -74,7 +74,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" id="description" rows="5" class="form-control"><%= drink.description %></textarea>
+            <textarea name="description" id="description" rows="5" class="form-control" maxlength="10000"><%= drink.description %></textarea>
         </div>
     </div>
     <div class="w-100"></div>
@@ -99,19 +99,4 @@
     </div>
 </div>
 
-<script>
-    function readURL(input){
-      if(input.files && input.files[0]){
-        let reader = new FileReader();
-        reader.onload = function(e){
-          $("#imgPreview").attr('src', e.target.result).width(100).height(100);
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    $('#img').change(function(){
-      readURL(this);
-    });
-</script>
 

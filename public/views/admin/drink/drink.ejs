@@ -9,7 +9,7 @@
     <% if(drinks.length > 0 ){ %>
     <div class="container">
         <div class="row">
-            <div class="table-wrap">
+            <div class="table">
                 <table class="table">
                     <thead class="thead-primary">
                     <tr>
@@ -36,13 +36,15 @@
                             <td>
                                 <div class="email">
                                     <span><%= drink.name %></span>
-                                    <% if(drink.categories.length > 0){%>
-                                        <span><%= drink.categories[0].name %> </span>
-                                    <%}%>
+                                    <span>
+                                        <% if(drink.categories.length > 0){%>
+                                            <%= drink.categories[0].name %>
+                                        <%}%>
+                                    </span>
                                 </div>
                             </td>
                             <td>
-                                <span class="price"><%= parseFloat(drink.price).toFixed(2) %>€</span>
+                                <span class="price"><%= parseFloat(drink.price).toFixed(2) %> €</span>
                             </td>
                             <td class="quantity">
                                 <p><%= drink.size %> l</p>
@@ -58,7 +60,7 @@
                             </td>
                             <td>
                                 <form action="/admin/drink/<%= drink._id %>?_method=DELETE" method="POST" class="d-flex align-items-center justify-content-center">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                 </form>
                             </td>
                         </tr>

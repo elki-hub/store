@@ -139,9 +139,9 @@ async function saveDrink(req, res, next) {
 
     return next();
   } catch (error) {
-    console.log("error in save Drink" + error);
+    console.log("error in save Drink " + error);
     return res.status(internalError.status).render(renderOnError, {
-      error: internalError.message,
+      error: internalError,
       layout: adminLayout,
       title: "Products",
       drinks: await getDrinksWithCategories(),
