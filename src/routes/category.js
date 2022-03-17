@@ -91,7 +91,7 @@ function saveCategoryAndRedirect(onErrorRender) {
       res.render(currentPath + `${onErrorRender}`, {
         layout: layout,
         title: "Categories",
-        category: category,
+        category: this.category,
       });
     }
   };
