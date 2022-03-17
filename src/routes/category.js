@@ -63,7 +63,7 @@ router.put(
 
 router.delete("/:id", async (req, res) => {
   await Category.findByIdAndDelete(req.params.id);
-  res.redirect("./");
+  res.send("success");
 });
 
 function saveCategoryAndRedirect(onErrorRender) {

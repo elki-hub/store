@@ -3,7 +3,8 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
-                    <%drinks.forEach(drink => { %>
+                    <%if(typeof drinks !== "undefined"){
+                    drinks.forEach(drink => { %>
                         <div class="col-md-4 d-flex">
                             <div class="product ftco-animate">
                                 <% if(drink.image === null || drink.image === undefined){%>
@@ -13,37 +14,27 @@
                                 <%}%>
                                     <div class="desc">
                                         <p class="meta-prod d-flex">
-                                            <a href="cart/add/<%= drink._id %>" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
+                                            <a onclick="return doAddToCart('cart/add/<%= drink._id %>');" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
                                             <a href="drink/<%= drink._id %>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="text text-center">
                                     <% if(drink.categories.length > 0){ %>
-                                        <span class="category"><%= drink.categories[0].name %> </span>
+                                        <span class="category"><%= drink.categories[0].name %></span>
+                                    <%}else{%>
+                                        <span class="category"> unknown </span>
                                     <%}%>
-                                    <h2><%= drink.name %></h2>
+                                    <h2>
+                                        <%= drink.name %>
+                                        <%if(typeof drink.size !== "undefined"){%> <small><%= drink.size%>l</small>  <%}%>
+                                    </h2>
                                     <p class="mb-0"><span class="price"><%= drink.price %> €</span></p>
                                 </div>
                             </div>
                         </div>
-                    <% }) %>
+                    <% })} %>
                 </div>
-<!--                <div class="row mt-5">-->
-<!--                    <div class="col text-center">-->
-<!--                        <div class="block-27">-->
-<!--                            <ul>-->
-<!--                                <li><a href="#">&lt;</a></li>-->
-<!--                                <li class="active"><span>1</span></li>-->
-<!--                                <li><a href="#">2</a></li>-->
-<!--                                <li><a href="#">3</a></li>-->
-<!--                                <li><a href="#">4</a></li>-->
-<!--                                <li><a href="#">5</a></li>-->
-<!--                                <li><a href="#">&gt;</a></li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
             <div class="col-md-3">
@@ -60,4 +51,25 @@
             </div>
         </div>
     </div>
+    </div>
 </section>
+
+<script>
+  function doAddToCart(url){
+    console.log("on add")
+    $.ajax({
+      url:url,
+      method:"GET",
+      data:{},
+      success: function(cart){
+        //document.getElementById ('cartLength').innerHTML = cart.length;
+        $('#cartLength').fadeOut(100).fadeIn(1000).text(cart.length);
+        $('.flaticon-shopping-bag').fadeOut(100).fadeIn(1000);
+        // let message = document.getElementById ('message');
+        // message.innerHTML = '<strong>Success!</strong> Product was successfully added to your cart.';
+        // message.hidden = false;
+      }
+    });
+    return false;
+  }
+</script>

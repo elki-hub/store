@@ -9,8 +9,6 @@
         </div>
         <div class="row">
             <div class="table">
-                <%let total = 0;%>
-                <% if(typeof cart !== "undefined" ){ %>
                 <table class="table">
                     <thead class="thead-primary">
                     <tr>
@@ -22,10 +20,11 @@
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <% cart.forEach(product => {
-                    console.log(product)%>
-                        <tr class="alert" role="alert">
+                    <tbody id="tableBody">
+                    <%let total = 0;
+                     if(typeof cart !== "undefined" ){
+                     cart.forEach(product => {%>
+                        <tr class="alert" role="alert" id="row<%= product.id %>">
                             <td>
                                 <% if(product.image === null || product.image === undefined){%>
                                     <div class="img" style="background-image: url(/images/no-image.png);"></div>
@@ -44,42 +43,30 @@
                             </td>
                             <td>
                                 <div>
-                                    <a href="/cart/update/<%= product.id %>?action=add" type="button" class="close" style="float: none; padding: 4px;">
+                                    <a onclick="return doUpdate('<%= product.id %>', 'add');" type="button" class="close" style="float: none; padding: 4px;">
                                         <span aria-hidden="true"><i class="fa fa-plus"></i></span>
                                     </a>
-                                    <span ><%= product.quantity %></span>
-                                    <a href="/cart/update/<%= product.id %>?action=remove" type="button" class="close" style="float: none; padding: 4px;">
+                                    <span id="quantity<%= product.id %>" style="width: 40px; text-align: center;"><%= product.quantity %></span>
+                                    <a onclick="return doUpdate('<%= product.id %>', 'remove');" type="button" class="close" style="float: none; padding: 4px;">
                                         <span aria-hidden="true"><i class="fa fa-minus"></i></span>
                                     </a>
                                 </div>
                             </td>
                             <% total += product.price * product.quantity%>
-                            <td><%= parseFloat(product.price * product.quantity).toFixed(2)%> €</td>
+                            <td id="total<%= product.id %>"><%= parseFloat(product.price * product.quantity).toFixed(2)%> €</td>
                             <td>
-                                <a href="/cart/update/<%= product.id %>?action=clear" type="button" class="close">
+                                <a onclick="return doUpdate('<%= product.id %>', 'clear');" type="button" class="close" data-dismiss="alert">
                                     <span aria-hidden="true"><i class="fa fa-close"></i></span>
                                 </a>
                             </td>
                         </tr>
-                    <%})%>
+                    <%})} %>
                     </tbody>
                 </table>
-                <%} else{ %>
-                    <table class="table">
-                            <thead class="thead-primary">
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>total</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                            </thead>
-                    </table>
+                <%if(typeof cart == "undefined"){ %>
                     <h3 class="text-center"> Your cart is empty </h3>
                 <%}%>
+                <div  id="noItems"></div>
             </div>
         </div>
         <div class="row justify-content-end">
@@ -87,7 +74,7 @@
                 <div class="cart-total mb-3">
                     <p class="d-flex total-price">
                         <span>Total</span>
-                        <span><%= parseFloat(total).toFixed(2) %>  €</span>
+                        <span id="total"><%= parseFloat(total).toFixed(2) %>  €</span>
                     </p>
                 </div>
                 <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
@@ -95,3 +82,47 @@
         </div>
     </div>
 </section>
+
+<script>
+  function doUpdate(id, action){
+    $.ajax({
+      url:"/cart/update/" + id + "?action=" + action,
+      method:"GET",
+      data:{},
+      success: function(cart){
+        if(cart.length === 0){
+          $('#total').fadeOut(100).fadeIn(1000).text(0.00 + " €");
+          document.getElementById ('noItems').innerHTML = '<h3 class="text-center"> Your cart is empty </h3>';
+          document.getElementById ('cartLength').innerHTML = '0';
+          document.getElementById ('tableBody').remove();
+          return;
+        }
+
+        let total = 0;
+        let quantity = 0;
+        let productTotal = 0;
+        cart.forEach(product => {
+          total += product.price * product.quantity;
+          if(id === product.id){
+            quantity = product.quantity;
+            productTotal = product.price * quantity;
+          }
+
+        })
+        $('#total').fadeOut(100).fadeIn(1000).text(parseFloat(total).toFixed(2) + "€");
+        document.getElementById ('cartLength').innerHTML = cart.length;
+        if(quantity === 0){
+          $('#row' + id).remove();
+          return;
+        }
+        if(action !== 'clear'){
+          console.log("here")
+          $('#total' + id).fadeOut(100).fadeIn(1000).text(parseFloat(productTotal).toFixed(2) + "€");
+          $('#quantity' + id).fadeOut(100).fadeIn(1000).text(quantity);
+        }
+      }
+    });
+    return false;
+  }
+</script>
+

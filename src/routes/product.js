@@ -118,7 +118,7 @@ router.put("/edit/:id", editDrink, saveDrink, async (req, res, next) => {
 });
 
 router.delete("/:id", deleteDrink, async (req, res) => {
-  res.redirect("./");
+  res.send("success");
 });
 
 module.exports = router;

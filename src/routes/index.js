@@ -11,6 +11,11 @@ const {
 router.use("/admin", AdminRouter);
 router.use("/cart", CartRouter);
 
+router.get("*", function async(req, res, next) {
+  res.locals.cart = req.session.cart;
+  next();
+});
+
 router.get("/", async (req, res) => {
   res.render("index", {
     title: "Good Drink for Good Moments",

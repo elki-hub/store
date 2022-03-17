@@ -8078,7 +8078,7 @@ h1, h2, h3, h4, h5,
 
 .ftco-navbar-light {
   background: transparent !important;
-  position: absolute;
+  position: fixed;
   top: 35px;
   left: 0;
   right: 0;
@@ -8103,7 +8103,7 @@ h1, h2, h3, h4, h5,
     display: inline-block;
     position: relative; }
     .ftco-navbar-light .btn-cart span {
-      font-size: 20px; }
+      font-size: 30px; }
     .ftco-navbar-light .btn-cart div {
       position: absolute;
       top: 0;
@@ -8276,7 +8276,7 @@ h1, h2, h3, h4, h5,
     .ftco-navbar-light.scrolled .btn-cart div {
       position: absolute;
       top: 0;
-      right: -5px;
+      right: 0px;
       height: 18px;
       line-height: 1;
       border-radius: 50%;

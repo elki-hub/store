@@ -38,11 +38,6 @@ app.use(express.static(path.join(__dirname, "../public"))); //to serve static js
 app.use(expressLayouts);
 app.use(methodOverride("_method")); //for delete and put
 
-app.get("*", function async(req, res, next) {
-  res.locals.cart = req.session.cart;
-  next();
-});
-
 app.use("/", Router);
 
 app.listen(port, () => {
