@@ -53,45 +53,6 @@ router.get("/add/:id", async (req, res) => {
   res.send(req.session.cart);
 });
 
-/*router.get("/add/:id", async (req, res) => {
-  let itemId = req.params.id;
-  let product = await Product.findById(req.params.id);
-  if (product === undefined) {
-    console.log("No product was found");
-    return res.redirect("/");
-  }
-  if (typeof req.session.cart === "undefined") {
-    req.session.cart = [];
-    req.session.cart.push({
-      id: product.id,
-      name: product.name,
-      quantity: 1,
-      price: parseFloat(product.price).toFixed(2),
-      image: product.image,
-    });
-  } else {
-    let cart = req.session.cart;
-    let newItem = true;
-    for (let i = 0; i < cart.length; i++) {
-      if (cart[i].id === itemId) {
-        cart[i].quantity++;
-        newItem = false;
-        break;
-      }
-    }
-    if (newItem) {
-      req.session.cart.push({
-        id: product.id,
-        name: product.name,
-        quantity: 1,
-        price: parseFloat(product.price).toFixed(2),
-        image: product.image,
-      });
-    }
-  }
-  res.redirect("back");
-});*/
-
 router.get("/update/:id", async (req, res) => {
   let itemId = req.params.id;
   let cart = req.session.cart;
