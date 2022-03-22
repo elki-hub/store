@@ -7,6 +7,11 @@ const {
   getDrinksWithCategories,
   getDrinkWithCategoryById,
 } = require("../utils/drinks");
+const User = require("../models/user");
+const {
+  checkUserSchema,
+  checkIfEmailUnique,
+} = require("../validators/user.validator");
 
 router.use("/admin", AdminRouter);
 router.use("/cart", CartRouter);
@@ -33,5 +38,41 @@ router.get("/drink/:id", async (req, res) => {
   // });
   res.redirect("/");
 });
+
+router.get("/register", async (req, res) => {
+  res.render("authorization/register", {
+    title: "Create Your Account",
+  });
+});
+
+router.get("/login", async (req, res) => {
+  res.render("authorization/login", {
+    title: "Login",
+  });
+});
+
+router.post(
+  "/register",
+  checkUserSchema,
+  checkIfEmailUnique,
+  async (req, res) => {
+    let { name, surname, email, password, address, phone } = req.body;
+
+    await User.collection.insertOne({
+      name,
+      surname,
+      //is_admin: true,
+      email,
+      password,
+      address,
+      phone,
+    });
+
+    res.render("authorization/login", {
+      title: "Login",
+      success: "You successfully created an account!",
+    });
+  }
+);
 
 module.exports = router;
