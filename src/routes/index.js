@@ -9,7 +9,8 @@ const {
 } = require("../utils/drinks");
 const User = require("../models/user");
 const {
-  checkUserSchema,
+  checkUserRegistrationSchema,
+  checkUserLoginSchema,
   checkIfEmailUnique,
 } = require("../validators/user.validator");
 
@@ -53,7 +54,7 @@ router.get("/login", async (req, res) => {
 
 router.post(
   "/register",
-  checkUserSchema,
+  checkUserRegistrationSchema,
   checkIfEmailUnique,
   async (req, res) => {
     let { name, surname, email, password, address, phone } = req.body;

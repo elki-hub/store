@@ -60,12 +60,8 @@
       method:"GET",
       data:{},
       success: function(cart){
-        //document.getElementById ('cartLength').innerHTML = cart.length;
         $('#cartLength').fadeOut(100).fadeIn(1000).text(cart.length);
         $('.flaticon-shopping-bag').fadeOut(100).fadeIn(1000);
-        // let message = document.getElementById ('message');
-        // message.innerHTML = '<strong>Success!</strong> Product was successfully added to your cart.';
-        // message.hidden = false;
       }
     });
     return false;
