@@ -9,24 +9,43 @@ const path = require("path");
 let fileUpload = require("express-fileupload");
 const session = require("express-session");
 
-//connecting to database
-DataBase.connect();
+const passport = require("passport");
+const flash = require("express-flash");
+const { internalError } = require("./utils/errors");
 
-//File upload
-app.use(fileUpload());
+// //Express middleware message
+// app.use(require("connect-flash")());
+// app.use(function (req, res, next) {
+//   res.locals.messages = require("express-mesages")(req, res);
+//   next();
+// });
 
-//Session
+//passport config
+const initializePassport = require("./config/passportConfig");
+initializePassport(passport);
+
+app.use(flash()); //
 app.use(
   session({
     secret: "secret",
-    resave: false,
-    //saveUninitialized: false,
+    //resave: true,
+    saveUninitialized: true,
     //store: sessionStore,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // Equals for 1 day (1day, 24h, 60min, 60s)
     },
   })
-);
+); //
+
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+//connecting to database
+DataBase.connect();
+
+//File upload
+app.use(fileUpload());
 
 //View engine setup
 app.set("layout", path.join(__dirname, "../public/views/_layouts/layout"));
@@ -37,6 +56,12 @@ app.use(express.urlencoded({ extended: false })); //body parser that parses only
 app.use(express.static(path.join(__dirname, "../public"))); //to serve static js/css files
 app.use(expressLayouts);
 app.use(methodOverride("_method")); //for delete and put
+
+app.get("*", function async(req, res, next) {
+  res.locals.cart = req.session.cart;
+  res.locals.user = req.user || null;
+  next();
+});
 
 app.use("/", Router);
 

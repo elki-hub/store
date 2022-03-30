@@ -1,26 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const AdminRouter = require("./admin");
-const CartRouter = require("./cart");
 const { getCategories } = require("../utils/categories");
 const {
   getDrinksWithCategories,
   getDrinkWithCategoryById,
 } = require("../utils/drinks");
-const User = require("../models/user");
 const {
-  checkUserRegistrationSchema,
-  checkUserLoginSchema,
-  checkIfEmailUnique,
-} = require("../validators/user.validator");
+  checkAuth,
+  checkNotAuth,
+  checkAuthAdmin,
+} = require("../utils/middleware");
 
-router.use("/admin", AdminRouter);
-router.use("/cart", CartRouter);
-
-router.get("*", function async(req, res, next) {
-  res.locals.cart = req.session.cart;
-  next();
-});
+router.use("/admin", checkAuthAdmin, require("./admin"));
+router.use("/cart", checkAuth, require("./cart"));
+router.use("/user", require("./user"));
 
 router.get("/", async (req, res) => {
   res.render("index", {
@@ -39,41 +32,5 @@ router.get("/drink/:id", async (req, res) => {
   // });
   res.redirect("/");
 });
-
-router.get("/register", async (req, res) => {
-  res.render("authorization/register", {
-    title: "Create Your Account",
-  });
-});
-
-router.get("/login", async (req, res) => {
-  res.render("authorization/login", {
-    title: "Login",
-  });
-});
-
-router.post(
-  "/register",
-  checkUserRegistrationSchema,
-  checkIfEmailUnique,
-  async (req, res) => {
-    let { name, surname, email, password, address, phone } = req.body;
-
-    await User.collection.insertOne({
-      name,
-      surname,
-      //is_admin: true,
-      email,
-      password,
-      address,
-      phone,
-    });
-
-    res.render("authorization/login", {
-      title: "Login",
-      success: "You successfully created an account!",
-    });
-  }
-);
 
 module.exports = router;
