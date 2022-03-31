@@ -16,20 +16,15 @@ module.exports = function (passport) {
       let user = await User.findOne({ email: email });
 
       if (!user) {
-        console.log("No user found");
-        return done(null, false, { message: "No user found!" });
+        return done(null, false, { message: incorrectCredentials.message });
       }
 
       if (await bcrypt.compare(password, user.password)) {
-        console.log("match");
         return done(null, user);
       } else {
-        console.log("Incorrect credentials");
         return done(null, false, { message: incorrectCredentials.message });
       }
     } catch (err) {
-      //res.status(500).render("login", internalError);
-      console.log("Internal error");
       return done(null, false, {
         message: internalError.message,
       });

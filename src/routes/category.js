@@ -1,5 +1,6 @@
 const express = require("express");
 const Category = require("./../models/category");
+const { noCategories, internalError } = require("../utils/errors");
 const router = express.Router();
 const currentPath = "admin/category/";
 const layout = "_layouts/admin_layout";
@@ -76,8 +77,8 @@ function saveCategoryAndRedirect(onErrorRender) {
         { slug: slug, _id: { $ne: req.params.id } },
         (e, category) => {
           if (category) {
-            //req.flash("danger", "Category wth this name already exist!");
-            throw "Category wth this name already exist!";
+            req.flash("warning", "Category wth this name already exist!");
+            return res.redirect("/admin/category");
           }
         }
       );
@@ -88,11 +89,12 @@ function saveCategoryAndRedirect(onErrorRender) {
       res.redirect("../");
     } catch (e) {
       console.log("catch error: " + e);
-      res.render(currentPath + `${onErrorRender}`, {
-        layout: layout,
-        title: "Categories",
-        category: this.category,
-      });
+
+      req.flash(
+        "warning",
+        `Status: ${internalError.status}! ${internalError.message}`
+      );
+      return res.redirect("/admin/category");
     }
   };
 }

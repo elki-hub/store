@@ -10,21 +10,19 @@ let fileUpload = require("express-fileupload");
 const session = require("express-session");
 
 const passport = require("passport");
-const flash = require("express-flash");
-const { internalError } = require("./utils/errors");
+const { internalError, noCategories } = require("./utils/errors");
 
 // //Express middleware message
-// app.use(require("connect-flash")());
-// app.use(function (req, res, next) {
-//   res.locals.messages = require("express-mesages")(req, res);
-//   next();
-// });
+app.use(require("connect-flash")());
+app.use(function (req, res, next) {
+  res.locals.messages = require("express-messages")(req, res);
+  next();
+});
 
 //passport config
 const initializePassport = require("./config/passportConfig");
 initializePassport(passport);
 
-app.use(flash()); //
 app.use(
   session({
     secret: "secret",
@@ -64,6 +62,16 @@ app.get("*", function async(req, res, next) {
 });
 
 app.use("/", Router);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+
+  req.flash(
+    "warning",
+    `Status: ${internalError.status}! ${internalError.message}`
+  );
+  return res.redirect("/");
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);

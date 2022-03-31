@@ -39,7 +39,7 @@ const new_password = Joi.string()
     "string.pattern.base": `Your password should have at least one uppercase, one lowercase letter and one number`,
   });
 
-const conf_password = Joi.required().valid(Joi.ref("password")).messages({
+const conf_password = Joi.required().valid(Joi.ref("new_password")).messages({
   "any.only": "Passwords must match",
 });
 

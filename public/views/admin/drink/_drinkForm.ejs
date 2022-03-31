@@ -14,16 +14,14 @@
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control">
                 <%if(drink.category && drink.categories.length !== 0){%>
-
                             <option value="<%= drink.category %>"><%= drink.categories[0].name %></option>
                     <%}else{%>
                             <option value="" selected disabled hidden>--Select--</option>
                     <%}
-
                     categories.forEach(category => { %>
                                 <option value="<%= category._id %>"><%= category.name %></option>
                         <% }) %>
-                        </select>
+                </select>
             </div>
         </div>
     </div>

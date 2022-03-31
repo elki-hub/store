@@ -1,9 +1,6 @@
 const Drinks = require("../models/drink");
 let fs = require("fs-extra");
 const { internalError } = require("../utils/errors");
-const renderOnError = "admin/drink/drink";
-const adminLayout = "_layouts/admin_layout";
-const { getCategories } = require("../utils/categories");
 
 async function getDrinksWithCategories() {
   try {
@@ -78,13 +75,11 @@ async function deleteDrink(req, res, next) {
     return next();
   } catch (e) {
     console.log(e);
-    return res.status(internalError.status).render(renderOnError, {
-      error: internalError.message,
-      layout: adminLayout,
-      title: "Products",
-      drinks: await getDrinksWithCategories(),
-      categories: await getCategories(),
-    });
+    req.flash(
+      "warning",
+      `Status: ${internalError.status}! ${internalError.message}`
+    );
+    return res.redirect("/admin/drink");
   }
 }
 
@@ -140,13 +135,11 @@ async function saveDrink(req, res, next) {
     return next();
   } catch (error) {
     console.log("error in save Drink " + error);
-    return res.status(internalError.status).render(renderOnError, {
-      error: internalError,
-      layout: adminLayout,
-      title: "Products",
-      drinks: await getDrinksWithCategories(),
-      categories: await getCategories(),
-    });
+    req.flash(
+      "warning",
+      `Status: ${internalError.status}! ${internalError.message}`
+    );
+    return res.redirect("/admin/drink");
   }
 }
 

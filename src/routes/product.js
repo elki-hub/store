@@ -27,12 +27,11 @@ router.get("/new", async (req, res) => {
   const categories = await getCategories();
 
   if (categories === undefined) {
-    return res.status(noCategories.status).render(viewsDrinkPath + "drink", {
-      failure: noCategories.message,
-      layout: adminLayout,
-      title: "Drinks",
-      drinks: await getDrinksWithCategories(),
-    });
+    req.flash(
+      "warning",
+      `Status: ${noCategories.status}! ${noCategories.message}`
+    );
+    return res.redirect("/admin/drink");
   }
   res.render(viewsDrinkPath + "new", {
     layout: adminLayout,
@@ -48,24 +47,18 @@ router.get("/edit/:id", async (req, res) => {
   const categories = await getCategories();
 
   if (categories === undefined) {
-    return res.status(noCategories.status).render(viewsDrinkPath + "drink", {
-      failure: noCategories.message,
-      layout: adminLayout,
-      title: "drinks",
-      drinks: await getDrinksWithCategories(),
-      categories: null,
-    });
+    req.flash(
+      "warning",
+      `Status: ${noCategories.status}! ${noCategories.message}`
+    );
+    return res.redirect("/admin/drink/");
   }
   if (drink === undefined) {
-    return res
-      .status(productWasNotFound.status)
-      .render(viewsDrinkPath + "drink", {
-        failure: productWasNotFound.message,
-        layout: adminLayout,
-        title: "Drinks",
-        drinks: await getDrinksWithCategories(),
-        categories: categories,
-      });
+    req.flash(
+      "warning",
+      `Status: ${productWasNotFound.status}! ${productWasNotFound.message}`
+    );
+    return res.redirect("/admin/drink/");
   }
 
   res.render(viewsDrinkPath + "edit", {
@@ -81,15 +74,11 @@ router.get("/:id", async (req, res) => {
   const drink = await getDrinkWithCategoryById(req.params.id);
 
   if (drink === undefined) {
-    return res
-      .status(productWasNotFound.status)
-      .render(viewsDrinkPath + "drink", {
-        failure: productWasNotFound.message,
-        layout: adminLayout,
-        title: "Drinks",
-        drinks: await getDrinksWithCategories(),
-        categories: await getCategories(),
-      });
+    req.flash(
+      "warning",
+      `Status: ${productWasNotFound.status}! ${productWasNotFound.message}`
+    );
+    return res.redirect("/admin/drink/");
   }
 
   res.render(viewsDrinkPath + "show", {
@@ -100,21 +89,13 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/new", createNewDrink, saveDrink, async (req, res, next) => {
-  res.render(viewsDrinkPath + "drink", {
-    success: "New drink was added",
-    layout: adminLayout,
-    title: "Drinks",
-    drinks: await getDrinksWithCategories(),
-  });
+  req.flash("success", "New drink was added");
+  res.redirect(viewsDrinkPath);
 });
 
 router.put("/edit/:id", editDrink, saveDrink, async (req, res, next) => {
-  res.render(viewsDrinkPath + "drink", {
-    success: "Drink was successfully changed",
-    layout: adminLayout,
-    title: "Drinks",
-    drinks: await getDrinksWithCategories(),
-  });
+  req.flash("success", "Drink was successfully changed");
+  res.redirect(viewsDrinkPath);
 });
 
 router.delete("/:id", deleteDrink, async (req, res) => {

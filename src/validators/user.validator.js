@@ -19,15 +19,26 @@ async function checkUserRegistrationSchema(req, res, next) {
       email,
       address,
       phone,
-      password: new_password,
+      new_password,
       conf_password,
     }).validateAsync(req.body);
   } catch (err) {
-    //console.log(err);
-    return res.render("authorization/register", {
-      title: "Create Your Account",
-      failure: err.message.split(`"`).join(``) + "!",
-    });
+    req.flash("danger", err.message.split(`"`).join(``) + "!");
+    return res.redirect("/user/register");
+  }
+  return next();
+}
+
+async function checkUserSchema(req, res, next) {
+  try {
+    await Joi.object({
+      password,
+      new_password,
+      conf_password,
+    }).validateAsync(req.body);
+  } catch (err) {
+    req.flash("danger", err.message.split(`"`).join(``) + "!");
+    return res.redirect("/user");
   }
   return next();
 }
@@ -39,11 +50,8 @@ async function checkUserLoginSchema(req, res, next) {
       password,
     }).validateAsync(req.body);
   } catch (err) {
-    //console.log(err);
-    return res.render("authorization/login", {
-      title: "Login",
-      failure: err.message.split(`"`).join(``) + "!",
-    });
+    req.flash("danger", err.message.split(`"`).join(``) + "!");
+    return res.redirect("/user/login");
   }
   return next();
 }
@@ -51,16 +59,14 @@ async function checkUserLoginSchema(req, res, next) {
 async function checkIfEmailUnique(req, res, next) {
   let user = await Users.collection.findOne({ email: { $eq: req.body.email } });
   if (user) {
-    // req.flash("danger", "Username exists, choose another!");
-    return res.render("authorization/register", {
-      title: "Create Your Account",
-      failure: "User with this email already exist",
-    });
+    req.flash("warning", "Username exists, choose another!");
+    return res.redirect("/user/register");
   }
   return next();
 }
 
 module.exports = {
+  checkUserSchema,
   checkUserRegistrationSchema,
   checkIfEmailUnique,
   checkUserLoginSchema,

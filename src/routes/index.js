@@ -9,7 +9,7 @@ const {
   checkAuth,
   checkNotAuth,
   checkAuthAdmin,
-} = require("../utils/middleware");
+} = require("../utils/authorization");
 
 router.use("/admin", checkAuthAdmin, require("./admin"));
 router.use("/cart", checkAuth, require("./cart"));
