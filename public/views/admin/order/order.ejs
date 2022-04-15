@@ -1,0 +1,103 @@
+<section class="ftco-section">
+
+    <% if(orders.length > 0 ){ %>
+    <div class="container">
+        <div class="row">
+            <div class="table">
+                <table class="table">
+                    <thead class="thead-primary">
+                    <tr>
+                        <th>Customer</th>
+                        <th>Order Id</th>
+                        <th>Price</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%orders.forEach(order => { %>
+                        <tr class="alert" role="alert" id="row<%= order._id %>">
+                            <td>
+                                <div class="email">
+                                    <span><%= order.customer %></span>
+                                </div>
+                            </td>
+                            <td>
+                                <p><%= order._id %></p>
+                            </td>
+                            <td>
+                                <span class="price"><%= parseFloat(order.price).toFixed(2) %> €</span>
+                            </td>
+                            <td class="quantity">
+                                <p> <%= order.data.toLocaleString() %> </p>
+                            </td>
+                            <td class="quantity">
+                                <p><%= order.status %> </p>
+                            </td>
+                            <td>
+                                <a href="/admin/order/<%= order._id %>" class="btn btn-info">View details</a>
+                            </td>
+                            <% if( order.status === "uzsakymas patvirtintas ir issiustas") { %>
+                                <td>
+                                    <button class="btn btn-success" hidden >Patvirtinti</button>
+                                    <button class="btn btn-success" >Patvirtinti pristatyma</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" hidden >Atmesti</button>
+                                </td>
+                            <% } %>
+                            <% if( order.status === "laukia patvirtinimo") { %>
+                            <td>
+
+                                <button onclick="return doUpdate('<%= order._id %>', 'order');" class="btn btn-success">Patvirtinti</button>
+
+                                <button class="btn btn-success" hidden >Patvirtinti pristatyma</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" >Atmesti</button>
+                            </td>
+                            <% } %>
+                            <% if( order.status === "uzsakymas atmestas" || "uzsakymas pristatytas") { %>
+                                <td>
+                                    <button  class="btn btn-success" hidden >Patvirtinti</button>
+                                    <button  class="btn btn-success" hidden >Patvirtinti pristatyma</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger" hidden >Atmesti</button>
+                                </td>
+                            <% } %>
+
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%} else{ %>
+        <h3 class="text-center"> There are no orders </h3>
+    <%}%>
+</section>
+
+<script>
+ /* function doUpdate(id, object){
+    if(confirm('Are you sure you want to delete this item?')){
+
+      if(id.status === )
+
+      console.log("id:"+id)
+      $.ajax({
+        url: "/admin/" + object+ "/" + id + "?_method=UPDATE",
+        method:"UPDATE",
+        data:{},
+        success: function(){
+          $("#row+id").update();
+        }
+      });
+    }
+    return false;
+  }*/
+</script>

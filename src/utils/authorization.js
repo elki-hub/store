@@ -18,7 +18,7 @@ function checkNotAuth(req, res, next) {
 }
 
 function checkAuthAdmin(req, res, next) {
-  console.log(res.locals);
+  //console.log(res.locals);
   if (req.isAuthenticated() && res.locals.user.is_admin) {
     return next();
   }

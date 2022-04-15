@@ -1,0 +1,17 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 product-details pl-md-5 ftco-animate">
+                <h3>Order Id: <br> <%= order._id %></h3>
+                <p>Customer: <%= order.customer %> </p>
+                <p>Status: <%= order.status %> </p>
+                <p>Date of order: <%= order.data.toLocaleString() %> </p>
+                <p>Details: <%= order.details %> </p>
+                <p class="price"><span>Total price: <%= order.price %> €</span></p>
+                <p>
+                    <a href="./" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

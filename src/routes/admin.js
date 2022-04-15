@@ -8,6 +8,10 @@ const { checkAuthAdmin } = require("../utils/authorization");
 router.use("/drink", require("./product"));
 router.use("/category", require("./category"));
 
+const OrderRouter = require("./order");
+const { getOrders, getOrdersWithCategories } = require("../utils/orders");
+router.use("/order", OrderRouter);
+
 router.get("/", checkAuthAdmin, async (req, res) => {
   const categories = await getCategories();
   res.render(currentPath + "admin", {
@@ -15,6 +19,7 @@ router.get("/", checkAuthAdmin, async (req, res) => {
     title: "Admin Page",
     categories: categories,
     drinks: await getDrinksWithCategories(),
+    orders: await getOrdersWithCategories(),
   });
 });
 
