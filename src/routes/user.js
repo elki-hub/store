@@ -60,10 +60,10 @@ router.post(
   checkUserRegistrationSchema,
   checkIfEmailUnique,
   async (req, res) => {
-    let { name, surname, email, password, address, phone } = req.body;
+    let { name, surname, email, new_password, address, phone } = req.body;
 
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(new_password, 10);
 
       await User.collection.insertOne({
         name,
@@ -76,6 +76,8 @@ router.post(
       });
     } catch (err) {
       console.log(err);
+      req.flash("warning", "Some issues in the server!");
+      return res.redirect("/user/register");
     }
 
     req.flash("success", "You successfully created an account!");

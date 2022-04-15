@@ -1,17 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { getCategories } = require("../utils/categories");
-const {
-  getDrinksWithCategories,
-  getDrinkWithCategoryById,
-} = require("../utils/drinks");
-const {
-  checkAuth,
-  checkNotAuth,
-  checkAuthAdmin,
-} = require("../utils/authorization");
+const { getDrinksWithCategories } = require("../utils/drinks");
+const { checkAuth } = require("../utils/authorization");
 
-router.use("/admin", checkAuthAdmin, require("./admin"));
+router.use("/admin", require("./admin"));
 router.use("/cart", checkAuth, require("./cart"));
 router.use("/user", require("./user"));
 

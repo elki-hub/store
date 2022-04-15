@@ -5,7 +5,9 @@ const { Schema, model } = mongoose;
 const CategorySchema = new Schema({
   name: {
     type: String,
-    required: [true, "Product name is required"],
+    validate: [/^[A-Za-z]+$/, "Category name should be alphabetic"],
+    required: [true, "Category name is required"],
+    maxLength: [20, "Category name is too long"],
   },
   slug: {
     type: String,

@@ -14,8 +14,9 @@ const {
   saveDrink,
 } = require("../utils/drinks");
 const { getCategories } = require("../utils/categories");
+const { checkAuthAdmin } = require("../utils/authorization");
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuthAdmin, async (req, res) => {
   res.render(viewsDrinkPath + "drink", {
     layout: adminLayout,
     title: "Drinks",
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/new", async (req, res) => {
+router.get("/new", checkAuthAdmin, async (req, res) => {
   const categories = await getCategories();
 
   if (categories === undefined) {
@@ -42,7 +43,7 @@ router.get("/new", async (req, res) => {
   });
 });
 
-router.get("/edit/:id", async (req, res) => {
+router.get("/edit/:id", checkAuthAdmin, async (req, res) => {
   const drink = await getDrinkWithCategoryById(req.params.id);
   const categories = await getCategories();
 
@@ -70,7 +71,7 @@ router.get("/edit/:id", async (req, res) => {
   });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuthAdmin, async (req, res) => {
   const drink = await getDrinkWithCategoryById(req.params.id);
 
   if (drink === undefined) {

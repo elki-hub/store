@@ -30,9 +30,9 @@ const password = Joi.string().max(30).required().messages({
 });
 
 const new_password = Joi.string()
-  //.min(8)
+  .min(8)
   .max(30)
-  //.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
+  .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
   .required()
   .label("Password")
   .messages({

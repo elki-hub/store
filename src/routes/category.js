@@ -4,8 +4,9 @@ const { noCategories, internalError } = require("../utils/errors");
 const router = express.Router();
 const currentPath = "admin/category/";
 const layout = "_layouts/admin_layout";
+const { checkAuthAdmin } = require("../utils/authorization");
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuthAdmin, async (req, res) => {
   const categories = await Category.find().sort({ name: "desc" });
   res.render(currentPath + "category", {
     layout: layout,
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
   });
 });*/
 
-router.get("/new", (req, res) => {
+router.get("/new", checkAuthAdmin, (req, res) => {
   res.render(currentPath + "new", {
     layout: layout,
     title: "Add new Category",
@@ -35,7 +36,7 @@ router.get("/new", (req, res) => {
   });
 });
 
-router.get("/edit/:id", async (req, res) => {
+router.get("/edit/:id", checkAuthAdmin, async (req, res) => {
   const category = await Category.findById(req.params.id);
   res.render(currentPath + "edit", {
     layout: layout,
@@ -72,29 +73,29 @@ function saveCategoryAndRedirect(onErrorRender) {
     let categoryName = req.body.name;
     let slug = categoryName.replace(/\s+/g, "-").toLowerCase();
 
+    // await Category.findOne({ slug: slug }, (e, category) => {
+    //   console.log(category);
+    //   if (e) {
+    //     console.log(e);
+    //   }
+    //   if (category) {
+    //     req.flash(
+    //       `warning", "Category with name ${categoryName} already exist!`
+    //     );
+    //     return res.redirect("./");
+    //   }
+    // });
+
     try {
-      Category.findOne(
-        { slug: slug, _id: { $ne: req.params.id } },
-        (e, category) => {
-          if (category) {
-            req.flash("warning", "Category wth this name already exist!");
-            return res.redirect("/admin/category");
-          }
-        }
-      );
       let category = req.category;
       category.name = categoryName;
+      category.slug = slug;
 
       await category.save();
       res.redirect("../");
-    } catch (e) {
-      console.log("catch error: " + e);
-
-      req.flash(
-        "warning",
-        `Status: ${internalError.status}! ${internalError.message}`
-      );
-      return res.redirect("/admin/category");
+    } catch (error) {
+      req.flash("warning", error.toString().split(`:`)[2] + "!");
+      return res.redirect("./");
     }
   };
 }

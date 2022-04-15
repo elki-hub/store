@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "export NODE_ENV=production && node src/app.js",
-    "dev": "export NODE_ENV=development && nodemon src/app.js"
+    "dev": "export NODE_ENV=development && nodemon src/app.js --open"
   },
   "keywords": [],
   "author": "",
