@@ -1,94 +1,80 @@
 const express = require("express");
 const router = express.Router();
-const Order = require("../models/order");
-const country = require("country-list-js");
 const viewsOrderPath = "admin/order/";
 const adminLayout = "_layouts/admin_layout";
-const { noCategories, productWasNotFound } = require("../utils/errors");
-//const { noUsers, productWasNotFound } = require("../utils/errors");
+const { OrderWasNotFound } = require("../utils/errors");
+const { checkAuthAdmin } = require("../utils/authorization");
 const {
-  getOrdersWithCategories,
-  //getOrdersWithUsers,
-  getOrderWithCategoryById,
-  //getOrderWithUserById,
-  deleteOrder,
-  createNewOrder,
-  saveOrder,
+  getOrderById,
+  getAllOrders,
+  updateOrderStatus,
 } = require("../utils/orders");
-const { getCategories } = require("../utils/categories");
-//const { getUsers } = require("../utils/users");
 
-router.get("/", async (req, res) => {
+const stats = [
+  "Order rejected",
+  "Pending for confirmation",
+  "Pending for delivery confirmation",
+  "Order delivered",
+];
+const stats2 = ["reject", "confirm", "confirmDelivery"];
+
+router.get("/", checkAuthAdmin, async (req, res) => {
   res.render(viewsOrderPath + "order", {
     layout: adminLayout,
     title: "Orders",
-    orders: await getOrdersWithCategories(),
-    //orders: await getOrdersWithUsers(),
+    orders: await getAllOrders(),
+    stats: stats,
   });
 });
 
-router.get("/new", async (req, res) => {
-  const categories = await getCategories();
-  //const users = await getUsers();
-
-  if (categories === undefined) {
-    //if (users === undefined) {
-    return res.status(noCategories.status).render(viewsOrderPath + "order", {
-      //return res.status(noUsers.status).render(viewsOrderPath + "order", {
-      failure: noCategories.message,
-      layout: adminLayout,
-      title: "Orders",
-      orders: await getOrdersWithCategories(),
-      //orders: await getOrdersWithUsers(),
-    });
-  }
-  res.render(viewsOrderPath + "new", {
-    layout: adminLayout,
-    title: "Add new Order",
-    categories: categories,
-    //users: users,
-    order: new Order(),
-    countries: country.names().sort(),
-  });
-});
-
-router.get("/:id", async (req, res) => {
-  const order = await getOrderWithCategoryById(req.params.id);
-  //const order = await getOrderWithUserById(req.params.id);
-
+router.get("/view/:id", async (req, res) => {
+  const order = await getOrderById(req.params.id);
   if (order === undefined) {
-    return res
-      .status(productWasNotFound.status)
-      .render(viewsOrderPath + "order", {
-        failure: productWasNotFound.message,
-        layout: adminLayout,
-        title: "Orders",
-        orders: await getOrdersWithCategories(),
-        //orders: await getOrdersWithUsers(),
-        categories: await getCategories(),
-        //users: await getUsers(),
-      });
+    req.flash(
+      "warning",
+      `Status: ${OrderWasNotFound.status}! ${OrderWasNotFound.message}`
+    );
+    return res.redirect("/admin");
   }
 
   res.render(viewsOrderPath + "show", {
     layout: adminLayout,
-    title: "View Order",
+    title: "Order's details",
     order: order,
+    stats: stats,
   });
 });
 
-router.post("/new", createNewOrder, saveOrder, async (req, res, next) => {
-  res.render(viewsOrderPath + "order", {
-    success: "New order was added",
-    layout: adminLayout,
-    title: "Orders",
-    orders: await getOrdersWithCategories(),
-    //orders: await getOrdersWithUsers(),
-  });
-});
+router.get("/:id/status/:status", checkAuthAdmin, async (req, res) => {
+  const order = await getOrderById(req.params.id);
 
-router.delete("/:id", deleteOrder, async (req, res) => {
-  res.send("success");
+  if (
+    (await updateOrderStatus(order, stats2.indexOf(req.params.status))) == null
+  ) {
+    req.flash(
+      "warning",
+      `Status: ${OrderWasNotFound.status}! ${OrderWasNotFound.message}`
+    );
+  }
+  //---------------------------------------------------------------------------------------
+  if (req.params.status === stats2[1]) {
+    req.flash("success", "Order ( nr.: " + req.params.id + ") was confirmed!");
+  } else if (req.params.status === stats2[2]) {
+    req.flash(
+      "success",
+      "Order's ( nr.: " + req.params.id + ") delivery was confirmed!"
+    );
+  } else if (req.params.status === stats2[0]) {
+    req.flash("success", "Order ( nr.: " + req.params.id + ") was rejected!");
+  } else {
+    req.flash(
+      "warning",
+      "Failed to confirm, reject or confirm order ( nr.: " +
+        req.params.id +
+        ") !"
+    );
+  }
+  res.redirect("/admin/order");
 });
 
 module.exports = router;

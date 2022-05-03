@@ -1,15 +1,33 @@
 <section class="ftco-section">
     <div class="container">
-        <div class="row">
+        <div class="row" >
             <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                <h3>Order Id: <br> <%= order._id %></h3>
-                <p>Customer: <%= order.customer %> </p>
-                <p>Status: <%= order.status %> </p>
+
+                <h2>Order Id: <%= order._id %></h2>
+                <p>Customer: <%= order.userid %> </p>
+                <p>Status: <%= stats[order.status] %> </p>
                 <p>Date of order: <%= order.data.toLocaleString() %> </p>
-                <p>Details: <%= order.details %> </p>
+                <br>
+                <h4>User contacts</h4>
+                <p>Name: <%= order.details[0]%> <%= order.details[1]%></p>
+                <p>Phone: <%= order.details[2]%></p>
+                <p>Address: <%= order.details[3]%></p>
+                <br>
+                <h4>Ordered products:</h4>
+                <% for (let i = 0; i < order.products.length; i++) { %>
+                <p style="margin:0"><%= i+1 %>. </p>
+                    <% if(order.products[i].image === null || order.products[i].image === undefined){%>
+                        <img class="img" src="/images/no-image.png" style="float: left; width:70px" alt="">
+                    <%} else{%>
+                        <img class="img" src="/images/drinks/<%= order.products[i].id %>_<%= order.products[i].image%>" style="float: left; height: 100px" alt="">
+                    <%}%>
+                    <p style="margin:0"> Name: <%= order.products[i].name %> </p>
+                    <p style="margin:0"> Quantity: <%= order.products[i].quantity %> </p>
+                    <p>Price of one: <%= order.products[i].price %> </p><br>
+                <% } %>
                 <p class="price"><span>Total price: <%= order.price %> €</span></p>
                 <p>
-                    <a href="./" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
+                    <a href="../" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
                 </p>
             </div>
         </div>

@@ -1,6 +1,6 @@
 <section class="ftco-section">
 
-    <% if(orders.length > 0 ){ %>
+    <% if(typeof orders !== "undefined" && orders.length > 0 ){ %>
     <div class="container">
         <div class="row">
             <div class="table">
@@ -22,7 +22,7 @@
                         <tr class="alert" role="alert" id="row<%= order._id %>">
                             <td>
                                 <div class="email">
-                                    <span><%= order.customer %></span>
+                                    <span><%= order.userid %></span>
                                 </div>
                             </td>
                             <td>
@@ -35,38 +35,36 @@
                                 <p> <%= order.data.toLocaleString() %> </p>
                             </td>
                             <td class="quantity">
-                                <p><%= order.status %> </p>
+                                    <p> <%= stats[order.status] %> </p>
                             </td>
                             <td>
-                                <a href="/admin/order/<%= order._id %>" class="btn btn-info">View details</a>
+                                <a href="/admin/order/view/<%= order._id %>" class="btn btn-info">View details</a>
                             </td>
-                            <% if( order.status === "uzsakymas patvirtintas ir issiustas") { %>
+                            <% if( order.status === 2) { %>
                                 <td>
-                                    <button class="btn btn-success" hidden >Patvirtinti</button>
-                                    <button class="btn btn-success" >Patvirtinti pristatyma</button>
+                                    <a href="/admin/order/<%= order._id %>/status/confirm" class="btn btn-success" hidden >Confirm</a>
+                                    <a href="/admin/order/<%= order._id %>/status/confirmDelivery" class="btn btn-success" >Confirm delivery</a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger" hidden >Atmesti</button>
+                                    <a href="/admin/order/<%= order._id %>/status/reject" class="btn btn-danger" hidden>Reject</a>
                                 </td>
                             <% } %>
-                            <% if( order.status === "laukia patvirtinimo") { %>
+                            <% if( order.status === 1) { %>
                             <td>
-
-                                <button onclick="return doUpdate('<%= order._id %>', 'order');" class="btn btn-success">Patvirtinti</button>
-
-                                <button class="btn btn-success" hidden >Patvirtinti pristatyma</button>
+                                <a href="/admin/order/<%= order._id %>/status/confirm" class="btn btn-success" >Confirm</a>
+                                <a href="/admin/order/<%= order._id %>/status/confirmDelivery" class="btn btn-success" hidden >Confirm delivery</a>
                             </td>
                             <td>
-                                <button class="btn btn-danger" >Atmesti</button>
+                                <a href="/admin/order/<%= order._id %>/status/reject" class="btn btn-danger" >Reject</a>
                             </td>
                             <% } %>
-                            <% if( order.status === "uzsakymas atmestas" || "uzsakymas pristatytas") { %>
+                            <% if( order.status === 0 || 3) { %>
                                 <td>
-                                    <button  class="btn btn-success" hidden >Patvirtinti</button>
-                                    <button  class="btn btn-success" hidden >Patvirtinti pristatyma</button>
+                                    <a href="/admin/order/<%= order._id %>/status/confirm" class="btn btn-success" hidden >Confirm</a>
+                                    <a href="/admin/order/<%= order._id %>/status/confirmDelivery" class="btn btn-success" hidden >Confirm delivery</a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger" hidden >Atmesti</button>
+                                    <a href="/admin/order/<%= order._id %>/status/reject" class="btn btn-danger" hidden >Reject</a>
                                 </td>
                             <% } %>
 

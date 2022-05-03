@@ -1,76 +1,38 @@
 const Orders = require("../models/order");
-let fs = require("fs-extra");
-const { internalError } = require("../utils/errors");
-const renderOnError = "admin/order/order";
-const adminLayout = "_layouts/admin_layout";
-const { getCategories } = require("../utils/categories");
-//const { getUsers } = require("../utils/users");
+const Order = require("../models/order");
 
-async function getOrdersWithCategories() {
-  //async function getOrdersWithUsers() {
+async function getAllOrders() {
   try {
-    return await Orders.aggregate([
-      {
-        $set: {
-          category: { $toObjectId: "$category" },
-          //user: { $toObjectId: "$user" },
-        },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "categories",
-
-          /*from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "users",*/
-        },
-      },
-    ]);
+    return await Orders.find().sort({ data: "desc" });
   } catch (error) {
     console.log(error);
     return [];
   }
 }
 
-async function getOrderWithCategoryById(id) {
-  //async function getOrderWithUserById(id) {
+async function getAllOrdersByUserId(id) {
   try {
-    let orders = await Orders.aggregate([
-      {
-        $set: {
-          id: { $toString: "$_id" },
-          category: { $toObjectId: "$category" },
-          //user: { $toObjectId: "$user" },
-        },
-      },
-      {
-        $match: {
-          id: id,
-        },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "categories",
-
-          /*from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "users",*/
-        },
-      },
-    ]);
-    return orders[0];
+    return await Orders.find({ userid: id });
   } catch (error) {
     console.log(error);
     return [];
   }
+}
+
+async function createNewOrder(cart, user) {
+  let order = new Order();
+  let price = 0;
+
+  await cart.forEach(
+    (product) => (price += parseFloat(product.price) * product.quantity)
+  );
+
+  order.userid = user.email;
+  order.price = price;
+  order.details = [user.name, user.surname, user.phone, user.address];
+  order.products = cart;
+
+  return await order.save();
 }
 
 async function getOrderById(id) {
@@ -82,73 +44,28 @@ async function getOrderById(id) {
   }
 }
 
-async function deleteOrder(req, res, next) {
+async function updateOrderStatus(order, status) {
   try {
-    await Orders.findByIdAndDelete(req.params.id);
-
-    return next();
-  } catch (e) {
-    console.log(e);
-    return res.status(internalError.status).render(renderOnError, {
-      error: internalError.message,
-      layout: adminLayout,
-      title: "Products",
-      orders: await getOrdersWithCategories(),
-      //orders: await getOrdersWithUsers(),
-      categories: await getCategories(),
-      //users: await getUsers(),
-    });
-  }
-}
-
-async function createNewOrder(req, res, next) {
-  req.order = new Orders();
-  return next();
-}
-
-async function saveOrder(req, res, next) {
-  try {
-    let { name, category, country, price, degree, description } = req.body;
-    //let { customer, price, data, status, details, goods(prekiu sarasas) } = req.body;
-
-    let order = req.order;
-    order.name = name;
-    order.category = category;
-    order.price = price;
-    order.country = country;
-    order.degree = degree;
-    order.description = description;
-
-    /*order.customer = customer;
-    order.price = price;
-    order.data = data;
-    order.status = status;
-    order.details = details;
-    order.goods = goods;*/
-
-    await order.save();
-    return next();
+    if (status === 1 && order.status === 1) {
+      order.status = 2;
+    } else if (status === 2 && order.status === 2) {
+      order.status = 3;
+    } else if (status === 0 && order.status === 1) {
+      order.status = 0;
+    } else {
+      return null;
+    }
+    return await order.save();
   } catch (error) {
-    console.log("error in save Order " + error);
-    return res.status(internalError.status).render(renderOnError, {
-      error: internalError,
-      layout: adminLayout,
-      title: "Products",
-      orders: await getOrdersWithCategories(),
-      //orders: await getOrdersWithUsers(),
-      categories: await getCategories(),
-      //users: await getUsers(),
-    });
+    console.log(error);
+    return [];
   }
 }
 
 module.exports = {
-  getOrdersWithCategories,
-  //getOrdersWithUsers,
-  getOrderWithCategoryById,
-  //getOrderWithUserById
-  getOrderById,
-  deleteOrder,
   createNewOrder,
-  saveOrder,
+  getAllOrdersByUserId,
+  getAllOrders,
+  getOrderById,
+  updateOrderStatus,
 };

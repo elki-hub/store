@@ -9,24 +9,21 @@ const OrderSchema = new Schema({
   },
   price: {
     type: Decimal128,
-    required: [true, "order price is required"],
-    min: [0.01, "Product price cannot be below 0"],
   },
   data: {
     type: Date,
     default: Date.now,
   },
   status: {
-    type: String,
-    default: "pending",
+    type: Number,
+    default: 1,
   },
   details: {
-    type: String,
+    type: Array,
   },
   products: {
     type: Array,
   },
-  //goods -> gerimu listas
 });
 
 module.exports = model("Order", OrderSchema);

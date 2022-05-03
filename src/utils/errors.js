@@ -23,6 +23,11 @@ noCategories = {
   status: 400,
 };
 
+OrderWasNotFound = {
+  message: "Order was not found!",
+  status: 407,
+};
+
 productWasNotFound = {
   message: "Product was not found!",
   status: 400,
@@ -34,5 +39,6 @@ module.exports = {
   incorrectCredentials,
   notAuthSrc,
   noCategories,
+  OrderWasNotFound,
   productWasNotFound,
 };
