@@ -19,7 +19,6 @@ router.get("/add/:id", async (req, res) => {
   try {
     let itemId = req.params.id;
     let product = await Product.findById(req.params.id);
-
     if (typeof req.session.cart === "undefined") {
       req.session.cart = [];
       req.session.cart.push({

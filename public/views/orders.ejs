@@ -1,0 +1,48 @@
+<section class="ftco-section">
+    <% if(typeof orders !== "undefined" && orders.length > 0 ){ %>
+    <div class="container">
+        <div class="row">
+            <div class="table">
+                <table class="table">
+                    <thead class="thead-primary">
+                    <tr>
+                        <th>Order Id</th>
+                        <th>Price</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%orders.forEach(order => { %>
+                        <tr class="alert" role="alert" id="row<%= order._id %>">
+                            <td>
+                                <p><%= order._id %></p>
+                            </td>
+                            <td>
+                                <span class="price"><%= parseFloat(order.price).toFixed(2) %> €</span>
+                            </td>
+                            <td class="quantity">
+                                <p> <%= order.data.toLocaleString() %> </p>
+                            </td>
+                            <td class="quantity">
+                                <p> <%= stats[order.status] %> </p>
+
+                            </td>
+                            <td>
+                                <a href="/orders/view/<%= order._id %>" class="btn btn-info">View details</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%} else{ %>
+        <h3 class="text-center"> There are no orders </h3>
+    <%}%>
+</section>
