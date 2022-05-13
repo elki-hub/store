@@ -1,0 +1,19 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 ftco-animate">
+                <form action="/admin/order/reject/<%= order.id %>?_method=PUT" method="POST">
+                    <div class="form-group">
+                        <label for="detailsReject">Rejection details:</label>
+                        <input value="<%= order.statusDetails %>" type="text" name="detailsReject" id="detailsReject" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <a href="../" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div> <!-- .col-md-8 -->
+        </div>
+    </div>
+</section>
+

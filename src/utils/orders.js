@@ -1,9 +1,15 @@
 const Orders = require("../models/order");
 const Order = require("../models/order");
+const Category = require("../models/category");
 
 async function getAllOrders() {
   try {
     return await Orders.find().sort({ data: "desc" });
+    /*const limit = 5;
+    const o = await Orders.find()
+      .limit(limit)
+      .skip((page - 1) * limit);*/
+    //return console.log(o);
   } catch (error) {
     console.log(error);
     return [];
@@ -62,7 +68,15 @@ async function updateOrderStatus(order, status) {
   }
 }
 
+async function rejectDetails(orderId, detailsReject) {
+  let order = await Order.findById(orderId);
+  order.statusDetails = detailsReject;
+  order.status = 0;
+  await order.save();
+}
+
 module.exports = {
+  rejectDetails,
   createNewOrder,
   getAllOrdersByUserId,
   getAllOrders,

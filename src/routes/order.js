@@ -8,6 +8,7 @@ const {
   getOrderById,
   getAllOrders,
   updateOrderStatus,
+  rejectDetails,
 } = require("../utils/orders");
 
 const stats = [
@@ -18,12 +19,36 @@ const stats = [
 ];
 const stats2 = ["reject", "confirm", "confirmDelivery"];
 
-router.get("/", checkAuthAdmin, async (req, res) => {
+router.get("/:page", checkAuthAdmin, async (req, res) => {
+  const orders = await getAllOrders();
+
+  //----------------------------
+
+  const currentPage = req.params.page;
+  const limit = 5;
+  let pages = orders.length / limit;
+  console.log("length " + orders.length);
+  console.log("pages " + pages);
+  console.log("liekana " + (pages % limit));
+
+  if (orders.length % limit !== 0) {
+    pages++;
+  }
+
+  const startIndex = (currentPage - 1) * limit;
+  const endIndex = currentPage * limit;
+
+  const result = orders.slice(startIndex, endIndex);
+  //const result = orders.slice(0, 3);
+  //console.log(result);
+  //----------------------------
   res.render(viewsOrderPath + "order", {
     layout: adminLayout,
     title: "Orders",
-    orders: await getAllOrders(),
+    orders: result,
+    //orders: orders,
     stats: stats,
+    pages: pages,
   });
 });
 
@@ -75,6 +100,35 @@ router.get("/:id/status/:status", checkAuthAdmin, async (req, res) => {
     );
   }
   res.redirect("/admin/order");
+});
+
+router.put("/reject/:id", async (req, res) => {
+  //console.log(req.body.detailsReject);
+  try {
+    await rejectDetails(req.params.id, req.body.detailsReject);
+  } catch (error) {
+    req.flash("warning", error.toString().split(`:`)[2] + "!");
+    return res.redirect("./");
+  }
+  res.redirect("/admin/order");
+});
+
+router.get("/rejectDetails/:id", async (req, res) => {
+  const order = await getOrderById(req.params.id);
+  if (order === undefined) {
+    req.flash(
+      "warning",
+      `Status: ${OrderWasNotFound.status}! ${OrderWasNotFound.message}`
+    );
+    return res.redirect("/admin");
+  }
+
+  res.render(viewsOrderPath + "rejectDetails", {
+    layout: adminLayout,
+    title: "Reject order reason",
+    order: order,
+    stats: stats,
+  });
 });
 
 module.exports = router;

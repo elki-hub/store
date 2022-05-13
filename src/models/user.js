@@ -21,6 +21,10 @@ const UserSchema = new Schema({
     default: false,
     required: [true, "User access type is required"],
   },
+  birthday: {
+    type: Date,
+    required: [true, "User birthday is required"],
+  },
   email: {
     type: String,
     unique: [true, "This email is in use"],

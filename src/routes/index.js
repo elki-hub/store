@@ -22,7 +22,7 @@ router.use("/cart", require("./cart"));
 router.use("/user", require("./user"));
 
 router.get("/", async (req, res) => {
-  res.render("index", {
+  return res.render("index", {
     title: "Good Drink for Good Moments",
     categories: await getCategories(),
     drinks: await getDrinksWithCategories(),

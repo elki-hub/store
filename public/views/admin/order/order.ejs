@@ -55,7 +55,7 @@
                                 <a href="/admin/order/<%= order._id %>/status/confirmDelivery" class="btn btn-success" hidden >Confirm delivery</a>
                             </td>
                             <td>
-                                <a href="/admin/order/<%= order._id %>/status/reject" class="btn btn-danger" >Reject</a>
+                                <a href="/admin/order/rejectDetails/<%= order._id %>" class="btn btn-danger" >Reject</a>
                             </td>
                             <% } %>
                             <% if( order.status === 0 || 3) { %>
@@ -64,38 +64,23 @@
                                     <a href="/admin/order/<%= order._id %>/status/confirmDelivery" class="btn btn-success" hidden >Confirm delivery</a>
                                 </td>
                                 <td>
-                                    <a href="/admin/order/<%= order._id %>/status/reject" class="btn btn-danger" hidden >Reject</a>
+                                    <a href="/admin/order/<%= order._id %>" class="btn btn-danger" hidden >Reject</a>
                                 </td>
                             <% } %>
-
                         </tr>
                     <% }) %>
                     </tbody>
                 </table>
+                    <div class="col-md-10 row mt-5 pt-3 d-flex">
+                        <%for(i = 1; i<=pages; i++){  %>
+                            <a href="/admin/order/<%= i %>" class="btn btn-outline-info"> <%= i %> </a>
+                        <% } %>
+                    </div>
             </div>
         </div>
     </div>
     <%} else{ %>
         <h3 class="text-center"> There are no orders </h3>
     <%}%>
+
 </section>
-
-<script>
- /* function doUpdate(id, object){
-    if(confirm('Are you sure you want to delete this item?')){
-
-      if(id.status === )
-
-      console.log("id:"+id)
-      $.ajax({
-        url: "/admin/" + object+ "/" + id + "?_method=UPDATE",
-        method:"UPDATE",
-        data:{},
-        success: function(){
-          $("#row+id").update();
-        }
-      });
-    }
-    return false;
-  }*/
-</script>

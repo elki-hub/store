@@ -3,6 +3,7 @@ const Users = require("../models/user");
 const {
   name,
   surname,
+  birthday,
   email,
   address,
   phone,
@@ -16,6 +17,7 @@ async function checkUserRegistrationSchema(req, res, next) {
     await Joi.object({
       name,
       surname,
+      birthday,
       email,
       address,
       phone,
@@ -59,7 +61,7 @@ async function checkUserLoginSchema(req, res, next) {
 async function checkIfEmailUnique(req, res, next) {
   let user = await Users.collection.findOne({ email: { $eq: req.body.email } });
   if (user) {
-    req.flash("warning", "Username exists, choose another!");
+    req.flash("warning", "Email is already in use!");
     return res.redirect("/user/register");
   }
   return next();

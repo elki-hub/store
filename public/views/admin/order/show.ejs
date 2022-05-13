@@ -2,10 +2,12 @@
     <div class="container">
         <div class="row" >
             <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-
                 <h2>Order Id: <%= order._id %></h2>
                 <p>Customer: <%= order.userid %> </p>
                 <p>Status: <%= stats[order.status] %> </p>
+                <% if(order.status === 0){%>
+                <p>Rejection reason: <%= order.statusDetails %> </p>
+                <% } %>
                 <p>Date of order: <%= order.data.toLocaleString() %> </p>
                 <br>
                 <h4>User contacts</h4>

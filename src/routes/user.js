@@ -11,6 +11,8 @@ const {
   checkIfEmailUnique,
   checkUserSchema,
 } = require("../validators/user.validator");
+const { deleteDrink } = require("../utils/drinks");
+const Category = require("../models/category");
 
 router.get("/", checkAuth, async (req, res) => {
   res.render("user", {
@@ -60,7 +62,8 @@ router.post(
   checkUserRegistrationSchema,
   checkIfEmailUnique,
   async (req, res) => {
-    let { name, surname, email, new_password, address, phone } = req.body;
+    let { name, surname, birthday, email, new_password, address, phone } =
+      req.body;
 
     try {
       const hashedPassword = await bcrypt.hash(new_password, 10);
@@ -68,6 +71,7 @@ router.post(
       await User.collection.insertOne({
         name,
         surname,
+        birthday,
         //is_admin: true,
         email,
         password: hashedPassword,
@@ -98,6 +102,12 @@ router.post(
 
 router.get("/logout", checkAuth, (req, res) => {
   req.logOut();
+  res.redirect("/");
+});
+
+router.delete("/:id", async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  req.flash("success", "You deleted your account!");
   res.redirect("/");
 });
 

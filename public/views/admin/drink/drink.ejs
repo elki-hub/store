@@ -77,13 +77,13 @@
   function doDelete(id, object){
     $("#message").fadeOut(100);
     if(confirm('Are you sure you want to delete this item?')){
-      console.log("id:"+id)
+      console.log("id:" + id)
       $.ajax({
-        url: "/admin/" + object+ "/" + id,
+        url: "/admin/" + object + "/" + id,
         method:"DELETE",
         data:{},
         success: function(){
-          $("#row"+id).remove();
+          $("#row" + id).remove();
         }
       });
     }

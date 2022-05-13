@@ -4,20 +4,28 @@
             <div class="col-xl-10 ftco-animate">
                 <form action="/user?_method=PUT" method="POST" enctype="multipart/form-data" name="userForm">
                     <div class="row align-items-end">
-
-                        <div class="col-md-12">
+                        <div class="col-md-10 ftco-animate">
+                            <h2>Information about my account</h2>
+                            <p>Name: <%= user.name %></p>
+                            <p>Surname: <%= user.surname %></p>
+                            <p>Email: <%= user.email %></p>
+                            <p>Phone: <%= user.phone %></p>
+                            <p>Address: <%= user.address %></p>
+                        </div>
+                        <div class="col-md-10">
+                            <h2>Change your password or delete your account</h2>
                             <div class="form-group">
                                 <label for="password">Old password</label>
                                 <input type="password" name="password" class="form-control" maxlength="100">
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-10">
                             <div class="form-group">
                                 <label for="new_password">New password</label>
                                 <input type="password" name="new_password" class="form-control" maxlength="100">
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-10">
                             <div class="form-group">
                                 <label for="conf_password">Confirm Password</label>
                                 <input type="password" name="conf_password" class="form-control" maxlength="100">
@@ -25,11 +33,14 @@
                         </div>
                     </div>
                     <div class="row mt-5 pt-3 d-flex">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <a href="../" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
+                </form>
+                <form method="post" action="/user/<%=user._id%>?_method=DELETE">
+                    <button onclick="confirm('Are you sure you want to delete your account?')" type="submit" class="btn btn-danger float-right" >Delete Account</button>
                 </form>
             </div>
         </div>

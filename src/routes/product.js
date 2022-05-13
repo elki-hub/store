@@ -3,6 +3,7 @@ const router = express.Router();
 const Drink = require("../models/drink");
 const country = require("country-list-js");
 const viewsDrinkPath = "admin/drink/";
+const routerPath = "/admin/drink/";
 const adminLayout = "_layouts/admin_layout";
 const { noCategories, productWasNotFound } = require("../utils/errors");
 const {
@@ -32,7 +33,7 @@ router.get("/new", checkAuthAdmin, async (req, res) => {
       "warning",
       `Status: ${noCategories.status}! ${noCategories.message}`
     );
-    return res.redirect("/admin/drink");
+    return res.redirect(routerPath);
   }
   res.render(viewsDrinkPath + "new", {
     layout: adminLayout,
@@ -52,14 +53,14 @@ router.get("/edit/:id", checkAuthAdmin, async (req, res) => {
       "warning",
       `Status: ${noCategories.status}! ${noCategories.message}`
     );
-    return res.redirect("/admin/drink/");
+    return res.redirect(routerPath);
   }
   if (drink === undefined) {
     req.flash(
       "warning",
       `Status: ${productWasNotFound.status}! ${productWasNotFound.message}`
     );
-    return res.redirect("/admin/drink/");
+    return res.redirect(routerPath);
   }
 
   res.render(viewsDrinkPath + "edit", {
@@ -79,7 +80,7 @@ router.get("/:id", checkAuthAdmin, async (req, res) => {
       "warning",
       `Status: ${productWasNotFound.status}! ${productWasNotFound.message}`
     );
-    return res.redirect("/admin/drink/");
+    return res.redirect(routerPath);
   }
 
   res.render(viewsDrinkPath + "show", {
@@ -91,12 +92,12 @@ router.get("/:id", checkAuthAdmin, async (req, res) => {
 
 router.post("/new", createNewDrink, saveDrink, async (req, res, next) => {
   req.flash("success", "New drink was added");
-  res.redirect(viewsDrinkPath);
+  res.redirect(routerPath);
 });
 
 router.put("/edit/:id", editDrink, saveDrink, async (req, res, next) => {
   req.flash("success", "Drink was successfully changed");
-  res.redirect(viewsDrinkPath);
+  res.redirect(routerPath);
 });
 
 router.delete("/:id", deleteDrink, async (req, res) => {

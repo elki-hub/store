@@ -20,6 +20,10 @@ const surname = Joi.string()
     "string.pattern.base": `Last name should be alphabetic!`,
   });
 
+const birthday = Joi.date().required().label("Birthday").messages({
+  "date.pattern.base": `Birthday is required!`,
+});
+
 const email = Joi.string()
   .email({ minDomainSegments: 2 })
   .required()
@@ -66,6 +70,7 @@ const phone = Joi.string()
 module.exports = {
   name,
   surname,
+  birthday,
   email,
   address,
   password,

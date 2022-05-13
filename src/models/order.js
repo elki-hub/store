@@ -18,6 +18,9 @@ const OrderSchema = new Schema({
     type: Number,
     default: 1,
   },
+  statusDetails: {
+    type: String,
+  },
   details: {
     type: Array,
   },
