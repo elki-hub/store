@@ -9880,6 +9880,10 @@ textarea.form-control {
     .categories li.active a span, .sidelink li.active a span {
       color: #b7472a; }
 
+.info{
+  font-size: 17px;
+}
+
 #ftco-loader {
   position: fixed;
   width: 96px;

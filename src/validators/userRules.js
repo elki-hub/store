@@ -3,7 +3,7 @@ const Joi = require("joi");
 const name = Joi.string()
   .min(2)
   .max(50)
-  .regex(/^[A-Za-z]+$/)
+  .regex(/^[A-ZĄČĘĖĮŠŲŪŽa-ząčęėįšųūž]+$/)
   .required()
   .label("First name")
   .messages({
@@ -12,17 +12,15 @@ const name = Joi.string()
 
 const surname = Joi.string()
   .min(2)
-  .max(30)
-  .regex(/^[A-Za-z]+$/)
+  .max(50)
+  .regex(/^[A-ZĄČĘĖĮŠŲŪŽa-ząčęėįšųūž]+$/)
   .required()
   .label("LastName")
   .messages({
     "string.pattern.base": `Last name should be alphabetic!`,
   });
 
-const birthday = Joi.date().required().label("Birthday").messages({
-  "date.pattern.base": `Birthday is required!`,
-});
+const birthday = Joi.date().required().label("Birthday");
 
 const email = Joi.string()
   .email({ minDomainSegments: 2 })
@@ -50,7 +48,7 @@ const conf_password = Joi.required().valid(Joi.ref("new_password")).messages({
 const address = Joi.string()
   .min(20)
   .max(200)
-  .regex(/^[#.0-9a-zA-Z\s,-]+$/)
+  .regex(/^[#.0-9a-ząčęėįšųūžA-ZĄČĘĖĮŠŲŪŽ\s,-]+$/)
   .required()
   .label("Address")
   .messages({

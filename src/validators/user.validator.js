@@ -67,9 +67,26 @@ async function checkIfEmailUnique(req, res, next) {
   return next();
 }
 
+async function checkIfAdult(req, res, next) {
+  const age = 20;
+  const adulthoodDate = new Date(
+    new Date().setFullYear(new Date().getFullYear() - age)
+  );
+  const birthday = new Date(req.body.birthday);
+  if (birthday > adulthoodDate) {
+    req.flash(
+      "warning",
+      "You have to be at least " + age + " years old to register"
+    );
+    return res.redirect("/user/register");
+  }
+  return next();
+}
+
 module.exports = {
   checkUserSchema,
   checkUserRegistrationSchema,
   checkIfEmailUnique,
   checkUserLoginSchema,
+  checkIfAdult,
 };

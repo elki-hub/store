@@ -10,9 +10,8 @@ const {
   checkUserLoginSchema,
   checkIfEmailUnique,
   checkUserSchema,
+  checkIfAdult,
 } = require("../validators/user.validator");
-const { deleteDrink } = require("../utils/drinks");
-const Category = require("../models/category");
 
 router.get("/", checkAuth, async (req, res) => {
   res.render("user", {
@@ -60,6 +59,7 @@ router.post(
   "/register",
   checkNotAuth,
   checkUserRegistrationSchema,
+  checkIfAdult,
   checkIfEmailUnique,
   async (req, res) => {
     let { name, surname, birthday, email, new_password, address, phone } =
