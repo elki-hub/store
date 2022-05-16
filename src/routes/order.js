@@ -19,17 +19,16 @@ const stats = [
 ];
 const stats2 = ["reject", "confirm", "confirmDelivery"];
 
+router.get("/", checkAuthAdmin, async (req, res) => {
+  res.redirect("/admin/order/1");
+});
+
 router.get("/:page", checkAuthAdmin, async (req, res) => {
   const orders = await getAllOrders();
-
-  //----------------------------
 
   const currentPage = req.params.page;
   const limit = 5;
   let pages = orders.length / limit;
-  console.log("length " + orders.length);
-  console.log("pages " + pages);
-  console.log("liekana " + (pages % limit));
 
   if (orders.length % limit !== 0) {
     pages++;
@@ -39,14 +38,11 @@ router.get("/:page", checkAuthAdmin, async (req, res) => {
   const endIndex = currentPage * limit;
 
   const result = orders.slice(startIndex, endIndex);
-  //const result = orders.slice(0, 3);
-  //console.log(result);
-  //----------------------------
+
   res.render(viewsOrderPath + "order", {
     layout: adminLayout,
     title: "Orders",
     orders: result,
-    //orders: orders,
     stats: stats,
     pages: pages,
   });
@@ -103,7 +99,6 @@ router.get("/:id/status/:status", checkAuthAdmin, async (req, res) => {
 });
 
 router.put("/reject/:id", async (req, res) => {
-  //console.log(req.body.detailsReject);
   try {
     await rejectDetails(req.params.id, req.body.detailsReject);
   } catch (error) {

@@ -4,9 +4,10 @@ const layout = "_layouts/layout";
 const { getCategories } = require("../utils/categories");
 const {
   getDrinksWithCategories,
+  getDrinkWithCategoryById,
   getDrinksWithCategoriesByCategory,
 } = require("../utils/drinks");
-const { OrderWasNotFound } = require("../utils/errors");
+const { OrderWasNotFound, productWasNotFound } = require("../utils/errors");
 const {
   getAllOrdersByUserId,
   createNewOrder,
@@ -32,6 +33,24 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.get("/drink/:id", async (req, res) => {
+  const drink = await getDrinkWithCategoryById(req.params.id);
+
+  if (drink === undefined) {
+    req.flash(
+      "warning",
+      `Status: ${productWasNotFound.status}! ${productWasNotFound.message}`
+    );
+    return res.redirect("/");
+  }
+
+  res.render("view", {
+    layout: layout,
+    title: "View Drink details",
+    drink: drink,
+  });
+});
+
 router.get("/:category", async (req, res) => {
   const category = req.params.category;
 
@@ -46,15 +65,35 @@ router.get("/order/", async (req, res) => {
   let order = await createNewOrder(res.locals.cart, res.locals.user);
   delete req.session.cart;
   req.flash("success", "Yuo made a new order! Yuor new order id: " + order._id);
-  res.redirect("/orders");
+  res.redirect("/orders/1");
 });
 
 router.get("/orders", async (req, res) => {
+  res.redirect("/orders/1");
+});
+
+router.get("/orders/:upage", async (req, res) => {
+  const orders = await getAllOrdersByUserId(res.locals.user.email);
+
+  const currentPage = req.params.upage;
+  const limit = 5;
+  let pages = orders.length / limit;
+
+  if (orders.length % limit !== 0) {
+    pages++;
+  }
+
+  const startIndex = (currentPage - 1) * limit;
+  const endIndex = currentPage * limit;
+
+  const result = orders.slice(startIndex, endIndex);
+
   res.render("orders", {
     layout: layout,
     title: "Orders that you made",
-    orders: await getAllOrdersByUserId(res.locals.user.email),
+    orders: result,
     stats: stats,
+    pages: pages,
   });
 });
 

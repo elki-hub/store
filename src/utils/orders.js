@@ -1,15 +1,9 @@
 const Orders = require("../models/order");
 const Order = require("../models/order");
-const Category = require("../models/category");
 
 async function getAllOrders() {
   try {
     return await Orders.find().sort({ data: "desc" });
-    /*const limit = 5;
-    const o = await Orders.find()
-      .limit(limit)
-      .skip((page - 1) * limit);*/
-    //return console.log(o);
   } catch (error) {
     console.log(error);
     return [];

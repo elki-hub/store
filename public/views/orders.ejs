@@ -39,6 +39,11 @@
                     <% }) %>
                     </tbody>
                 </table>
+                <div class="col-md-10 row mt-5 pt-3 d-flex">
+                    <%for(i = 1; i<=pages; i++){  %>
+                        <a href="/orders/<%= i %>" class="btn btn-outline-info"> <%= i %> </a>
+                    <% } %>
+                </div>
             </div>
         </div>
     </div>

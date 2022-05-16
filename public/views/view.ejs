@@ -1,0 +1,27 @@
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-5 ftco-animate">
+                <% if(drink.image === null){%>
+                    <a href="/images/prod-1.jpg" class="image-popup prod-img-bg"><img src="/images/no-image.png" class="img-fluid" alt="No image"></a>
+                <%} else{ %>
+                        <a href="/images/drinks/<%= drink._id %>_<%= drink.image%>" class="image-popup prod-img-bg"><img src="/images/drinks/<%= drink._id %>_<%= drink.image%>" class="img-fluid" alt="No image"></a>
+                <%}%>
+            </div>
+            <div class="col-lg-6 product-details pl-md-5 ftco-animate">
+                <h3><%= drink.name %></h3>
+                <p class="price"><span><%= drink.price %> €</span></p>
+                <% if(drink.categories.length > 0){%>
+                    <p>Category: <%= drink.categories[0].name %></p>
+                <%}%>
+                <p>Degree: <%= drink.degree %></p>
+
+                <p><%= drink.description %></p>
+
+                <p>
+                    <a href="/" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
