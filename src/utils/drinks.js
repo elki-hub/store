@@ -1,6 +1,7 @@
 const Drinks = require("../models/drink");
 let fs = require("fs-extra");
 const { internalError } = require("../utils/errors");
+const { getCategoryId } = require("../utils/categories");
 
 async function getDrinksWithCategories() {
   try {
@@ -8,6 +9,36 @@ async function getDrinksWithCategories() {
       {
         $set: {
           category: { $toObjectId: "$category" },
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+    ]);
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+async function getDrinksWithCategoriesByCategory(category) {
+  const categoryId = await getCategoryId(category);
+
+  try {
+    return await Drinks.aggregate([
+      {
+        $set: {
+          category: { $toObjectId: "$category" },
+        },
+      },
+      {
+        $match: {
+          category: categoryId,
         },
       },
       {
@@ -145,6 +176,7 @@ async function saveDrink(req, res, next) {
 
 module.exports = {
   getDrinksWithCategories,
+  getDrinksWithCategoriesByCategory,
   getDrinkWithCategoryById,
   getDrinkById,
   deleteDrink,

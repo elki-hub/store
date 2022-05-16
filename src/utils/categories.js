@@ -9,13 +9,14 @@ async function getCategories() {
   }
 }
 
-async function getCategoryById(id) {
+async function getCategoryId(category) {
   try {
-    return null;
+    let categories = await Category.find({ name: category });
+    return categories[0]._id;
   } catch (error) {
     console.log(error);
     return [];
   }
 }
 
-module.exports = { getCategories, getCategoryById };
+module.exports = { getCategories, getCategoryId };

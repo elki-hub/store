@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const layout = "_layouts/layout";
 const { getCategories } = require("../utils/categories");
-const { getDrinksWithCategories } = require("../utils/drinks");
+const {
+  getDrinksWithCategories,
+  getDrinksWithCategoriesByCategory,
+} = require("../utils/drinks");
 const { OrderWasNotFound } = require("../utils/errors");
 const {
   getAllOrdersByUserId,
@@ -26,6 +29,16 @@ router.get("/", async (req, res) => {
     title: "Good Drink for Good Moments",
     categories: await getCategories(),
     drinks: await getDrinksWithCategories(),
+  });
+});
+
+router.get("/:category", async (req, res) => {
+  const category = req.params.category;
+
+  return res.render("index", {
+    title: category,
+    categories: await getCategories(),
+    drinks: await getDrinksWithCategoriesByCategory(category),
   });
 });
 
