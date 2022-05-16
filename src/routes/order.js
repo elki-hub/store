@@ -23,6 +23,10 @@ router.get("/", checkAuthAdmin, async (req, res) => {
   res.redirect("/admin/order/1");
 });
 
+router.get("/", checkAuthAdmin, async (req, res) => {
+  return res.redirect("/admin/order/1");
+});
+
 router.get("/:page", checkAuthAdmin, async (req, res) => {
   const orders = await getAllOrders();
 

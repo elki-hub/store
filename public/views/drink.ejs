@@ -41,7 +41,7 @@
             <div class="col-md-3">
                 <div class="sidebar-box ftco-animate">
                     <div class="categories">
-                        <h3>Drinks Types</h3>
+                        <h3>Drink Types</h3>
                         <ul class="p-0">
                             <% categories.forEach( category => {%>
                                 <li><a href="/<%= category.name%>"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
@@ -49,8 +49,27 @@
                                 <li><a href="/">All<span class="fa fa-chevron-right"></span></a></li>
                         </ul>
                     </div>
+                    <div>
+                        <form action="/filter?_method=POST" method="POST">
+                            <div>
+                                <input type="range" name="min_price"
+                                       min="0" max="<%= filter.max %>" step="1"
+                                       value="<%= filter.min %>">
+                                <label for="min_price">Min value</label>
+                            </div>
+                            <div>
+                                <input type="range" name="max_price"
+                                       min="<%= filter.min %>" max="100" step="1"
+                                       value="<%= filter.max %>" >
+                                <label for="max_price">Max value</label>
+                            </div>
+                            <button type="submit"> apply </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+
+
         </div>
     </div>
     </div>

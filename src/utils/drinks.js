@@ -26,6 +26,17 @@ async function getDrinksWithCategories() {
   }
 }
 
+async function getFilteredDrinksWithCategories(filter) {
+  let drinks;
+  if (filter.category.length > 0) {
+    drinks = await getDrinksWithCategoriesByCategory(filter.category);
+  } else {
+    drinks = await getDrinksWithCategories();
+  }
+
+  return drinks;
+}
+
 async function getDrinksWithCategoriesByCategory(category) {
   const categoryId = await getCategoryId(category);
 
@@ -177,6 +188,7 @@ async function saveDrink(req, res, next) {
 module.exports = {
   getDrinksWithCategories,
   getDrinksWithCategoriesByCategory,
+  getFilteredDrinksWithCategories,
   getDrinkWithCategoryById,
   getDrinkById,
   deleteDrink,

@@ -12,6 +12,7 @@ const {
   checkUserSchema,
   checkIfAdult,
 } = require("../validators/user.validator");
+const { getCategories } = require("../utils/categories");
 
 router.get("/", checkAuth, async (req, res) => {
   res.render("user", {
@@ -22,12 +23,14 @@ router.get("/", checkAuth, async (req, res) => {
 router.get("/register", checkNotAuth, async (req, res) => {
   res.render("authorization/register", {
     title: "Create Your Account",
+    categories: await getCategories(),
   });
 });
 
 router.get("/login", checkNotAuth, async (req, res) => {
   res.render("authorization/login", {
     title: "Login",
+    categories: await getCategories(),
   });
 });
 

@@ -6,6 +6,7 @@ const {
   getDrinksWithCategories,
   getDrinkWithCategoryById,
   getDrinksWithCategoriesByCategory,
+  getFilteredDrinksWithCategories,
 } = require("../utils/drinks");
 const { OrderWasNotFound, productWasNotFound } = require("../utils/errors");
 const {
@@ -13,6 +14,12 @@ const {
   createNewOrder,
   getOrderById,
 } = require("../utils/orders");
+
+let filter = {
+  min: 1,
+  max: 99,
+  category: "",
+};
 
 const stats = [
   "Order rejected",
@@ -26,10 +33,35 @@ router.use("/cart", require("./cart"));
 router.use("/user", require("./user"));
 
 router.get("/", async (req, res) => {
+  filter = {
+    min: 1,
+    max: 99,
+    category: "",
+  };
+
   return res.render("index", {
     title: "Good Drink for Good Moments",
     categories: await getCategories(),
     drinks: await getDrinksWithCategories(),
+    filter: filter,
+  });
+});
+
+router.post("/filter", async (req, res) => {
+  // console.log(filter);
+  // console.log(req.body);
+  filter.min = req.body.min_price;
+  filter.max = req.body.max_price;
+  let title = "Good Drink for Good Moments";
+  if (filter.category.length > 0) {
+    title = filter.category;
+  }
+
+  return res.render("index", {
+    title: title,
+    categories: await getCategories(),
+    drinks: await getFilteredDrinksWithCategories(filter),
+    filter: filter,
   });
 });
 
@@ -53,11 +85,13 @@ router.get("/drink/:id", async (req, res) => {
 
 router.get("/:category", async (req, res) => {
   const category = req.params.category;
+  filter.category = category;
 
   return res.render("index", {
     title: category,
     categories: await getCategories(),
     drinks: await getDrinksWithCategoriesByCategory(category),
+    filter: filter,
   });
 });
 
