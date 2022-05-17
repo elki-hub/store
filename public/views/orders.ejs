@@ -40,8 +40,11 @@
                     </tbody>
                 </table>
                 <div class="col-md-10 row mt-5 pt-3 d-flex">
+                    <% const page = url.split("/")[2]%>
                     <%for(i = 1; i<=pages; i++){  %>
-                        <a href="/orders/<%= i %>" class="btn btn-outline-info"> <%= i %> </a>
+                        <a href="/orders/<%= i %>"
+                           class="btn btn-outline-info <%if(parseInt(page) === i ){%>active<%}%>"
+                        > <%= i %> </a>
                     <% } %>
                 </div>
             </div>

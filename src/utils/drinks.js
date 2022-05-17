@@ -35,7 +35,7 @@ async function getFilteredDrinksWithCategories(filter) {
   }
 
   return drinks.filter(
-    (drink) => drink.price > filter.min && drink.price < filter.max
+    (drink) => drink.price >= filter.min && drink.price <= filter.max
   );
 }
 
