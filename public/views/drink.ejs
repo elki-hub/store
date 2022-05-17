@@ -44,7 +44,7 @@
                         <h3>Drink Types</h3>
                         <ul class="p-0">
                             <% categories.forEach( category => {%>
-                                <li><a href="/filter/<%= category.name%>"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/filter/<%= category.name%>/1"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
                             <%})%>
                                 <li><a href="/">All<span class="fa fa-chevron-right"></span></a></li>
                         </ul>
@@ -52,28 +52,66 @@
                     <div>
                         <form action="/filter?_method=POST" method="POST">
                             <div>
-                                <input type="range" name="min_price"
-                                       min="0" max="<%= filter.max %>" step="1"
-                                       value="<%= filter.min %>">
-                                <label for="min_price">Min value</label>
+                                <div class="price-input">
+                                    <div class="field">
+                                        <span>Min</span>
+                                        <input type="number" name="min_price"  class="input-min" value="250">
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                        <span>Max</span>
+                                        <input type="number" name="max_price" class="input-max" value="750">
+                                    </div>
+                                </div>
+                                <div class="slider">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" class="range-min"
+                                           min="0" max="1000" value="250" step="1">
+                                    <input type="range" class="range-max"
+                                           min="0" max="1000" value="750" step="1">
+                                </div>
                             </div>
-                            <div>
-                                <input type="range" name="max_price"
-                                       min="<%= filter.min %>" max="100" step="1"
-                                       value="<%= filter.max %>" >
-                                <label for="max_price">Max value</label>
-                            </div>
-                            <button type="submit"> apply </button>
+
+                            <button type="submit" class="btn btn-info"> Apply </button>
+
                         </form>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
     </div>
 </section>
+
+<!--<script>
+  function getURL() {
+
+    let queryString = window.location.href;
+    const myArray = queryString.slice(20,21);
+    alert("The URL of this page is: " + myArray);
+  }
+</script>-->
+
+<script>
+  let slider = document.getElementById("myRange");
+  let output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+</script>
+<script>
+  let slider2 = document.getElementById("myRange2");
+  let output2 = document.getElementById("demo2");
+  output2.innerHTML = slider2.value;
+
+  slider2.oninput = function() {
+    output2.innerHTML = this.value;
+  }
+</script>
 
 <script>
   function doAddToCart(url){
@@ -90,3 +128,19 @@
     return false;
   }
 </script>
+
+<!--
+<script>
+  function myFunction() {
+    let header = document.getElementById("myDIV");
+    let btns = header.getElementsByClassName("btn btn-outline-info");
+    btns.value = header.getElementsByClassName("btn btn-outline-info").active;
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function() {
+        let current = document.getElementsByClassName("active").active;
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+      });
+    }
+  }
+</script>-->

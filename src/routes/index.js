@@ -16,8 +16,8 @@ const {
 } = require("../utils/orders");
 
 let filter = {
-  min: 1,
-  max: 99,
+  min: 0,
+  max: 100,
   category: "",
 };
 
@@ -34,8 +34,8 @@ router.use("/user", require("./user"));
 
 router.get("/", async (req, res) => {
   filter = {
-    min: 1,
-    max: 99,
+    min: 0,
+    max: 100,
     category: "",
   };
 
@@ -54,7 +54,7 @@ router.post("/filter", async (req, res) => {
   if (filter.category.length > 0) {
     title = filter.category;
   }
-  console.log(filter);
+
   return res.render("index", {
     title: title,
     categories: await getCategories(),
