@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../models/drink");
 const { internalError, productWasNotFound } = require("../utils/errors");
+const { checkAuth } = require("../utils/authorization");
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   res.render("cart", {
     title: "My Products",
     cart: req.session.cart,
