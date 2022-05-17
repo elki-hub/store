@@ -5,7 +5,11 @@ const country = require("country-list-js");
 const viewsDrinkPath = "admin/drink/";
 const routerPath = "/admin/drink/";
 const adminLayout = "_layouts/admin_layout";
-const { noCategories, productWasNotFound } = require("../utils/errors");
+const {
+  noCategories,
+  productWasNotFound,
+  OrderWasNotFound,
+} = require("../utils/errors");
 const {
   getDrinksWithCategories,
   getDrinkWithCategoryById,
@@ -13,9 +17,11 @@ const {
   createNewDrink,
   editDrink,
   saveDrink,
+  getDrinkById,
 } = require("../utils/drinks");
 const { getCategories } = require("../utils/categories");
 const { checkAuthAdmin } = require("../utils/authorization");
+const { getOrderById } = require("../utils/orders");
 
 router.get("/", checkAuthAdmin, async (req, res) => {
   res.redirect("/admin/drink/1");
@@ -104,6 +110,23 @@ router.put("/edit/:id", editDrink, saveDrink, async (req, res) => {
 
 router.delete("/:id", deleteDrink, async (req, res) => {
   res.send("success");
+});
+
+router.get("/view/:id", async (req, res) => {
+  const drink = await getDrinkWithCategoryById(req.params.id);
+  if (drink === undefined) {
+    req.flash(
+      "warning",
+      `Status: ${OrderWasNotFound.status}! ${OrderWasNotFound.message}`
+    );
+    return res.redirect("/admin");
+  }
+  console.log(drink);
+  res.render(viewsDrinkPath + "show", {
+    layout: adminLayout,
+    title: "Drink details",
+    drink: drink,
+  });
 });
 
 module.exports = router;

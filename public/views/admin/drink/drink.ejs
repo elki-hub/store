@@ -53,7 +53,7 @@
                                 <p><%= drink.degree %> %</p>
                             </td>
                             <td>
-                                <a href="/admin/drink/<%= drink._id %>" class="btn btn-primary">View item</a>
+                                <a href="/admin/drink/view/<%= drink._id %>" class="btn btn-primary">View item</a>
                             </td>
                             <td>
                                 <a href="/admin/drink/edit/<%= drink._id %>" class="btn btn-info">Edit</a>
@@ -66,11 +66,13 @@
                     </tbody>
                 </table>
                 <div class="col-md-10 row mt-5 pt-3 d-flex">
+                    <% const page = url.split("/")[3]%>
                     <%for(i = 1; i<=pages; i++){  %>
-                        <a href="/admin/drink/<%= i %>" class="btn btn-outline-info"> <%= i %> </a>
+                        <a href="/admin/drink/<%= i %>"
+                           class="btn btn-outline-info <%if(parseInt(page) === i ){%>active<%}%>"
+                        > <%= i %> </a>
                     <% } %>
                 </div>
-                <p> <%  %> /  <%= Math.floor(pages) %> </p>
             </div>
         </div>
     </div>
@@ -78,6 +80,7 @@
         <h3 class="text-center"> There are no drinks </h3>
     <%}%>
 </section>
+
 
 <script>
   function doDelete(id, object){

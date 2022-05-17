@@ -72,11 +72,13 @@
                     </tbody>
                 </table>
                     <div class="col-md-10 row mt-5 pt-3 d-flex">
-                        <%for(i = 1; i<=pages; i++){  %>
-                            <a href="/admin/order/<%= i %>" class="btn btn-outline-info"> <%= i %> </a>
-                        <% } %>
+                            <% const page = url.split("/")[3]%>
+                            <%for(i = 1; i<=pages; i++){  %>
+                                <a href="/admin/order/<%= i %>"
+                                   class="btn btn-outline-info <%if(parseInt(page) === i ){%>active<%}%>"
+                                > <%= i %> </a>
+                            <% } %>
                     </div>
-                <p> <%  %> /  <%= Math.floor(pages) %> </p>
             </div>
         </div>
     </div>

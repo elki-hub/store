@@ -16,6 +16,7 @@ const { internalError, noCategories } = require("./utils/errors");
 app.use(require("connect-flash")());
 app.use(function (req, res, next) {
   res.locals.messages = require("express-messages")(req, res);
+  res.locals.url = req.originalUrl;
   next();
 });
 

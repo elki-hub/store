@@ -14,12 +14,13 @@
                 <% if(drink.categories.length > 0){%>
                     <p>Category: <%= drink.categories[0].name %></p>
                 <%}%>
+                <p>Country: <%= drink.country %></p>
                 <p>Degree: <%= drink.degree %></p>
-
+                <p>Size: <%= drink.size %></p>
                 <p><%= drink.description %></p>
 
                 <p>
-                    <a href="./" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
+                    <a href="/admin/drink/1" class="btn btn-primary py-3 px-5 mr-2">Go back</a>
                     <a href="/admin/drink/edit/<%= drink.id %>" class="btn btn-primary py-3 px-5">Edit</a>
                 </p>
             </div>

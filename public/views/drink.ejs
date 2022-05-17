@@ -34,10 +34,8 @@
                     <% })} else{ %>
                                 <h3 class="text-center"> There are no products </h3>
                             <% } %>
-
                 </div>
             </div>
-
             <div class="col-md-3">
                 <div class="sidebar-box ftco-animate">
                     <div class="categories">
@@ -49,11 +47,12 @@
                                 <li><a href="/">All<span class="fa fa-chevron-right"></span></a></li>
                         </ul>
                     </div>
-                    <div>
+                    <div class="categories filter">
                         <form action="/filter?_method=POST" method="POST">
                             <% const max = 100;
                                 const min = 0 %>
                             <div>
+                                <h3>Price filter</h3>
                                 <div class="price-input">
                                     <div class="field">
                                         <span>Min</span>
@@ -75,10 +74,11 @@
                                            min="<%= min %>" max="<%= max %>" value="<%= filter.max %>" step="1">
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn btn-info"> Apply </button>
+                            <div class="space">
+                                <button type="submit" class="btn btn-info"> Apply </button>
+                                <a href="/removeFilter" class="btn btn-info pull-right"> Remove </a>
+                            </div>
                         </form>
-                        <a href="/removeFilter" class="btn btn-info"> Remove </a>
                     </div>
                 </div>
             </div>
@@ -86,34 +86,6 @@
     </div>
     </div>
 </section>
-
-<!--<script>
-  function getURL() {
-
-    let queryString = window.location.href;
-    const myArray = queryString.slice(20,21);
-    alert("The URL of this page is: " + myArray);
-  }
-</script>-->
-
-<script>
-  let slider = document.getElementById("myRange");
-  let output = document.getElementById("demo");
-  output.innerHTML = slider.value;
-
-  slider.oninput = function() {
-    output.innerHTML = this.value;
-  }
-</script>
-<script>
-  let slider2 = document.getElementById("myRange2");
-  let output2 = document.getElementById("demo2");
-  output2.innerHTML = slider2.value;
-
-  slider2.oninput = function() {
-    output2.innerHTML = this.value;
-  }
-</script>
 
 <script>
   function doAddToCart(url){
@@ -130,19 +102,3 @@
     return false;
   }
 </script>
-
-<!--
-<script>
-  function myFunction() {
-    let header = document.getElementById("myDIV");
-    let btns = header.getElementsByClassName("btn btn-outline-info");
-    btns.value = header.getElementsByClassName("btn btn-outline-info").active;
-    for (let i = 0; i < btns.length; i++) {
-      btns[i].addEventListener("click", function() {
-        let current = document.getElementsByClassName("active").active;
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-      });
-    }
-  }
-</script>-->
