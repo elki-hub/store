@@ -9,10 +9,14 @@ async function getCategories() {
   }
 }
 
-async function getCategoryId(category) {
+async function getCategoryId(categoryName) {
   try {
-    let categories = await Category.find({ name: category });
-    return categories[0]._id;
+    let category = await Category.findOne({ name: categoryName });
+    if (!category) {
+      return [];
+    }
+
+    return category._id;
   } catch (error) {
     console.log(error);
     return [];

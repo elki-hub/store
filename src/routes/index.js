@@ -48,20 +48,19 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/filter", async (req, res) => {
-  // console.log(filter);
-  // console.log(req.body);
-  filter.min = req.body.min_price;
-  filter.max = req.body.max_price;
+  filter.min = parseInt(req.body.min_price);
+  filter.max = parseInt(req.body.max_price);
   let title = "Good Drink for Good Moments";
   if (filter.category.length > 0) {
     title = filter.category;
   }
-
+  console.log(filter);
   return res.render("index", {
     title: title,
     categories: await getCategories(),
     drinks: await getFilteredDrinksWithCategories(filter),
     filter: filter,
+    user: res.locals.user,
   });
 });
 
@@ -83,7 +82,7 @@ router.get("/drink/:id", async (req, res) => {
   });
 });
 
-router.get("/:category", async (req, res) => {
+router.get("/filter/:category", async (req, res) => {
   const category = req.params.category;
   filter.category = category;
 

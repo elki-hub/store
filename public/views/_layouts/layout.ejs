@@ -42,7 +42,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
                             <%if(typeof categories !== "undefined"){
                             categories.forEach(category => { %>
-                                <a class="dropdown-item" href="/<%= category.name%>"><%= category.name %></a>
+                                <a class="dropdown-item" href="/filter/<%= category.name%>"><%= category.name %></a>
                             <% })} %>
                         </div>
                     </li>

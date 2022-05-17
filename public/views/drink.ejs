@@ -44,7 +44,7 @@
                         <h3>Drink Types</h3>
                         <ul class="p-0">
                             <% categories.forEach( category => {%>
-                                <li><a href="/<%= category.name%>"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/filter/<%= category.name%>"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
                             <%})%>
                                 <li><a href="/">All<span class="fa fa-chevron-right"></span></a></li>
                         </ul>

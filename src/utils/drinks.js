@@ -34,12 +34,14 @@ async function getFilteredDrinksWithCategories(filter) {
     drinks = await getDrinksWithCategories();
   }
 
-  return drinks;
+  return drinks.filter(
+    (drink) => drink.price > filter.min && drink.price < filter.max
+  );
 }
 
-async function getDrinksWithCategoriesByCategory(category) {
-  const categoryId = await getCategoryId(category);
-
+async function getDrinksWithCategoriesByCategory(categoryName) {
+  const category = await getCategoryId(categoryName);
+  if (!category) return [];
   try {
     return await Drinks.aggregate([
       {
@@ -49,7 +51,7 @@ async function getDrinksWithCategoriesByCategory(category) {
       },
       {
         $match: {
-          category: categoryId,
+          category: category,
         },
       },
       {
