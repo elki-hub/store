@@ -47,6 +47,20 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.get("/removeFilter/", async (req, res) => {
+  const category = filter.category;
+
+  if (category.length > 0) {
+    filter = {
+      min: 0,
+      max: 100,
+      category: "",
+    };
+    return res.redirect("/filter/" + category);
+  }
+  return res.redirect("/");
+});
+
 router.post("/filter", async (req, res) => {
   filter.min = parseInt(req.body.min_price);
   filter.max = parseInt(req.body.max_price);

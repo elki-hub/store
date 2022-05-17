@@ -44,39 +44,41 @@
                         <h3>Drink Types</h3>
                         <ul class="p-0">
                             <% categories.forEach( category => {%>
-                                <li><a href="/filter/<%= category.name%>/1"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
+                                <li><a href="/filter/<%= category.name%>"><%= category.name%><span class="fa fa-chevron-right"></span></a></li>
                             <%})%>
                                 <li><a href="/">All<span class="fa fa-chevron-right"></span></a></li>
                         </ul>
                     </div>
                     <div>
                         <form action="/filter?_method=POST" method="POST">
+                            <% const max = 100;
+                                const min = 0 %>
                             <div>
                                 <div class="price-input">
                                     <div class="field">
                                         <span>Min</span>
-                                        <input type="number" name="min_price"  class="input-min" value="250">
+                                        <input type="number" name="min_price"  class="input-min" value="<%= filter.min %>">
                                     </div>
                                     <div class="separator">-</div>
                                     <div class="field">
                                         <span>Max</span>
-                                        <input type="number" name="max_price" class="input-max" value="750">
+                                        <input type="number" name="max_price" class="input-max" value="<%= filter.max %>">
                                     </div>
                                 </div>
                                 <div class="slider">
-                                    <div class="progress"></div>
+                                    <div class="progress" style="left: <%= filter.min / max * 100 %>%; right: <%= 100 - (filter.max / max * 100) %>%"></div>
                                 </div>
                                 <div class="range-input">
                                     <input type="range" class="range-min"
-                                           min="0" max="1000" value="250" step="1">
+                                           min="<%= min %>" max="<%= max %>" value="<%= filter.min %>" step="1">
                                     <input type="range" class="range-max"
-                                           min="0" max="1000" value="750" step="1">
+                                           min="<%= min %>" max="<%= max %>" value="<%= filter.max %>" step="1">
                                 </div>
                             </div>
 
                             <button type="submit" class="btn btn-info"> Apply </button>
-
                         </form>
+                        <a href="/removeFilter" class="btn btn-info"> Remove </a>
                     </div>
                 </div>
             </div>
